@@ -1,23 +1,19 @@
-import logo from './logo.svg';
+import React from 'react';
+import Navbar from './navbar/navbar';
+import pinkplanet from './photos/pink-planet.png'
 import './App.css';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Navbar />
+      <div className="content">
+        {/* Your main content goes here */}
+        <h1>Stay in sync with Orbit</h1>
+        <em>—where every group revolves around seamless connection and effortless coordination-
+        </em>
+        <img src={pinkplanet} alt="Example" className="planet-image" />
+      </div>
     </div>
   );
 }

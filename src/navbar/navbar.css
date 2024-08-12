@@ -1,0 +1,86 @@
+/* Ensure full height for the body */
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Lora:ital,wght@0,400..700;1,400..700&display=swap');
+body, html, #root, .App {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: "Lora", serif;
+}
+
+/* Left-side navigation bar */
+.navbar-left {
+    position: fixed;
+    text-decoration: none;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 30px; /* Set the desired width */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #ffffff;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    padding: 20px;
+    z-index: 1000; /* Ensure it stays on top */
+}
+
+/* Top logo centered */
+.navbar-top {
+    position: fixed;
+    top: 0;
+    left: 30px; /* Start just after the left navbar */
+    right: 30px; /* End just before the right navbar */
+    height: 30px; /* Set the desired height */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #ffffff;
+    padding: 20px;
+    z-index: 1000; /* Ensure it stays on top */
+}
+
+/* Right-side navigation bar */
+.navbar-right {
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: 30px; /* Set the desired width */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #ffffff;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    padding: 20px;
+    z-index: 1000; /* Ensure it stays on top */
+}
+
+/* Styling for links */
+.navbar a {
+    text-decoration: none !important; /* Removes the underline */
+    color: #f794ba; /* Link color */
+    font-weight: bold;
+    font-size: 16px;
+}
+
+/* Ensuring link color remains consistent in all states */
+.navbar a:link, .navbar a:visited, .navbar a:hover, .navbar a:active {
+    color: #f794ba; /* Same color for all states */
+    text-decoration: none !important; /* No underline for any state */
+}
+
+.logo {
+    font-size: 20px;
+    font-weight: bold;
+    color: #f794ba;
+}
+
+/* Padding for the content to avoid overlap */
+.content {
+    padding: 60px;
+    margin: auto;
+    max-width: 800px;
+    padding-top: 120px; /* Adjust for the top navbar */
+}

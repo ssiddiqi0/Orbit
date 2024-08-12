@@ -1,5 +1,6 @@
 .App {
   text-align: center;
+  background-color: #ffddea;
 }
 
 .App-logo {
@@ -35,4 +36,10 @@
   to {
     transform: rotate(360deg);
   }
+}
+.planet-image {
+  max-width: 50%; /* Adjust as needed */
+  height: auto; /* Maintain aspect ratio */
+  display: block;
+  margin: 0 auto; /* Center the image */
 }
