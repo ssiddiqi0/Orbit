@@ -1,0 +1,58 @@
+
+/* Left-side navigation bar */
+.navbar-left {
+    position: fixed;
+    text-decoration: none;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 30px; /* Set the desired width */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #ffffff;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    padding: 20px;
+    z-index: 1000; /* Ensure it stays on top */
+}
+
+/* Top logo centered */
+.navbar-top {
+    position: fixed;
+    top: 0;
+    left: 30px; /* Start just after the left navbar */
+    right: 30px; /* End just before the right navbar */
+    height: 30px; /* Set the desired height */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #ffffff;
+    padding: 20px;
+    z-index: 1000; /* Ensure it stays on top */
+}
+
+/* Right-side navigation bar */
+.navbar-right {
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: 30px; /* Set the desired width */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #ffffff;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    padding: 20px;
+    z-index: 1000; /* Ensure it stays on top */
+}
+
+/* Styling for links */
+.navbar a {
+    text-decoration: none !important; /* Removes the underline */
+   color: #f794ba; /* Link color */
+    font-weight: bold;
+    font-size: 16px;
+}

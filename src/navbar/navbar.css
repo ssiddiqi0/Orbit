@@ -7,73 +7,153 @@ body, html, #root, .App {
     font-family: "Lora", serif;
 }
 
-/* Left-side navigation bar */
-.navbar-left {
+/* Top navbar styling */
+.navbar {
     position: fixed;
-    text-decoration: none;
     top: 0;
     left: 0;
-    height: 100%;
-    width: 30px; /* Set the desired width */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #ffffff;
-    writing-mode: vertical-rl;
-    text-orientation: mixed;
-    padding: 20px;
-    z-index: 1000; /* Ensure it stays on top */
-}
-
-/* Top logo centered */
-.navbar-top {
-    position: fixed;
-    top: 0;
-    left: 30px; /* Start just after the left navbar */
-    right: 30px; /* End just before the right navbar */
-    height: 30px; /* Set the desired height */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #ffffff;
-    padding: 20px;
-    z-index: 1000; /* Ensure it stays on top */
-}
-
-/* Right-side navigation bar */
-.navbar-right {
-    position: fixed;
-    top: 0;
     right: 0;
-    height: 100%;
-    width: 30px; /* Set the desired width */
+    height: 60px;
     display: flex;
-    justify-content: center;
     align-items: center;
-    background-color: #ffffff;
-    writing-mode: vertical-rl;
-    text-orientation: mixed;
-    padding: 20px;
-    z-index: 1000; /* Ensure it stays on top */
+    justify-content: space-between;
+    background-color: rgba(255, 255, 255, 0.1); /* Transparent background */
+    padding: 0 20px;
+    z-index: 1000;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* Styling for links */
-.navbar a {
-    text-decoration: none !important; /* Removes the underline */
-    color: #f794ba; /* Link color */
+/* Content inside the navbar */
+.navbar-content {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+/* Logo styling */
+.logo {
+    font-size: 35px;
     font-weight: bold;
-    font-size: 16px;
+    color: #f794ba;
+    margin-right: auto; /* Pushes the menu and profile to the right */
 }
 
-/* Ensuring link color remains consistent in all states */
-.navbar a:link, .navbar a:visited, .navbar a:hover, .navbar a:active {
-    color: #f794ba; /* Same color for all states */
+/* Navbar links (menu and profile) */
+.navbar-links {
+    display: flex;
+    align-items: center;
+}
+
+/* Menu button */
+.menu-button {
+    text-decoration: none;
+    color: #1f040e;
+    font-weight: normal;
+    font-size: 18px;
+    background: none;
+    font-family: "Lora", serif;
+    border: none;
+    padding: 0;
+    margin-right: 20px; /* Space between menu and profile */
+    cursor: pointer;
+}
+
+/* Profile link */
+.navbar-link {
+    text-decoration: none;
+    color: #9a2653;
+    font-weight: normal;
+    font-size: 18px;
+    background: none;
+    font-family: "Lora", serif;
+    border: none;
+    padding: 0;
+    margin-right: 20px; /* Space between menu and profile */
+    cursor: pointer;
+}
+.navbar a:focus, .menu-button:focus {
+    outline: none;
+}
+
+/* Ensure no underlining at any state */
+.navbar a:link, .navbar a:visited, .navbar a:hover, .navbar a:active, .navbar a:focus {
+    color: #1f040e; /* Same color for all states */
     text-decoration: none !important; /* No underline for any state */
 }
+.menu-button:link, .menu-button:visited, .menu-button:hover, .menu-button:active, .menu-button:focus{
+    color: #1f040e;
+    text-decoration: none;
+}
 
-.logo {
+/* Popup menu styling */
+.menu-popup {
+    position: fixed;
+    top: 60px; /* Position just below the navbar */
+    right: 0;
+    width: 200px;
+    height: 98%;
+    background: rgba(224, 108, 166, 0.708);
+    color: white;
+    padding: 20px;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+
+/* Other styles (same as before) */
+.menu-popup ul {
+    list-style: none;
+    padding: 0;
+}
+
+.menu-popup ul li {
+    margin-bottom: 15px;
+}
+
+.menu-popup ul li a {
+    color: white;
+    text-decoration: none;
+}
+
+.menu-popup ul li a:hover {
+    text-decoration: underline;
+}
+
+.menu-item {
+    color: white;
+    margin-bottom: 25px;
+}
+
+.menu-item a {
+    display: block;
     font-size: 20px;
+    color: white;
+    padding: 30px 0;
     font-weight: bold;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    transition: background-color 0.3s ease;
+}
+
+.menu-item a:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.close-button {
+    position: absolute;
+    bottom: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: none;
+    border: none;
+    color: white;
+    font-size: 30px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.close-button:hover {
     color: #f794ba;
 }
 

@@ -1,6 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Lora:ital,wght@0,400..700;1,400..700&display=swap');
+
+
+
+
 .App {
   text-align: center;
-  background-color: #ffddea;
+  background-image: url("photos/space4.jpg");
+  background-size: cover; /* Cover the entire background */
+  background-repeat: no-repeat; /* Prevent the background from repeating */
+  background-attachment: fixed; /* Make the background move with the scroll */
+  background-position: center center; /* Center the background image */
+  min-height: 100vh; /* Ensure the height covers the viewport */
+  width: 100%; /* Full width */
+  overflow-x: hidden;
 }
 
 .App-logo {
@@ -41,5 +53,310 @@
   max-width: 50%; /* Adjust as needed */
   height: auto; /* Maintain aspect ratio */
   display: block;
+  animation: upDown 2s ease-in-out infinite;
   margin: 0 auto; /* Center the image */
+}
+
+/* Profile Page */
+.icon {
+  max-width: 50%;
+  height: 5cm;
+  display: block;
+  margin: 0 auto;
+}
+
+.signup-profile {
+  font-family: "Lora", serif;
+  max-width: 500px;               /* Maximum width for the form container */
+  margin: 0 auto;                 /* Center the form container horizontally */
+  padding: 20px;                  /* Add padding inside the container */
+  background: #ffffff;            /* Background color for the form container */
+  border-radius: 10px;            /* Rounded corners for the form container */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
+
+.signup-profile h2 {
+  font-size: 24px;                /* Font size for the heading */
+  margin-bottom: 20px;            /* Space below the heading */
+  color: #f794ba;                 /* Heading color */
+  text-align: center;             /* Center the heading text */
+}
+
+/* Form styling */
+form {
+  font-family: "Lora", serif;
+  display: flex;
+  flex-direction: column;         /* Stack form elements vertically */
+  gap: 15px;                      /* Space between form elements */
+}
+
+/* Label styling */
+label {
+  font-family: "Lora", serif;
+  font-size: 16px;                /* Font size for labels */
+  margin-bottom: 5px;             /* Space below the label */
+  color: #333333;                 /* Label color */
+}
+
+/* Input field styling */
+input[type="text"], 
+input[type="email"], 
+input[type="password"] {
+  font-family: "Lora", serif;
+  width: 100%;                    /* Full width of the input field */
+  padding: 10px;                 /* Padding inside the input field */
+  font-size: 16px;               /* Font size for input text */
+  border: 1px solid #cccccc;     /* Light border color */
+  border-radius: 5px;            /* Rounded corners for input fields */
+  box-sizing: border-box;        /* Include padding and border in the element's total width and height */
+}
+
+/* Input field focus styling */
+input:focus {
+  border-color: #f794ba;          /* Change border color on focus */
+  outline: none;                  /* Remove default outline */
+  box-shadow: 0 0 5px rgba(247, 148, 186, 0.5); /* Subtle shadow for focus effect */
+}
+
+.button1 {
+  font-family: "Lora", serif;
+  display: inline-block;        /* Ensure the button fits its content */
+  padding: 10px 20px;           /* Add padding inside the button */
+  font-size: 16px;              /* Set the font size */
+  font-weight: bold;            /* Make the font bold */
+  color: #ffffff;               /* Set the text color */
+  background-color: #f794ba;    /* Set the background color */
+  border: none;                 /* Remove default border */
+  border-radius: 25px;          /* Make the button rounded */
+  cursor: pointer;              /* Change cursor to pointer on hover */
+  text-align: center;           /* Center the text inside the button */
+  text-decoration: none;        /* Remove underline if used with <a> tags */
+  transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth transitions */
+}
+
+/* Optional: Add a hover effect */
+.button1:hover {
+  background-color: #e67e9c;    /* Slightly darker background on hover */
+  transform: scale(1.05);       /* Slightly increase the button size */
+}
+
+/* Optional: Add an active effect */
+.button1:active {
+  background-color: #d55b89;    /* Even darker background when the button is pressed */
+  transform: scale(0.95);       /* Slightly decrease the button size */
+}
+
+/* Login stuff */
+/* Login container styling */
+.login-container {
+  font-family: "Lora", serif;
+  max-width: 500px;               /* Maximum width for the form container */
+  margin: 0 auto;                 /* Center the form container horizontally */
+  padding: 20px;                  /* Add padding inside the container */
+  background: #faecff;            /* Background color for the form container */
+  border-radius: 10px;            /* Rounded corners for the form container */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
+
+/* Heading styling */
+.login-container h2 {
+  font-size: 24px;                /* Font size for the heading */
+  margin-bottom: 20px;            /* Space below the heading */
+  color: #f794ba;                 /* Heading color */
+  text-align: center;             /* Center the heading text */
+}
+
+/* Form styling */
+.login-container form {
+  display: flex;
+  flex-direction: column;         /* Stack form elements vertically */
+  gap: 15px;                      /* Space between form elements */
+}
+
+/* Input field styling */
+.login-container input[type="email"], 
+.login-container input[type="password"] {
+  width: 100%;                    /* Full width of the input field */
+  padding: 10px;                 /* Padding inside the input field */
+  font-size: 16px;               /* Font size for input text */
+  border: 1px solid #cccccc;     /* Light border color */
+  border-radius: 5px;            /* Rounded corners for input fields */
+  box-sizing: border-box;        /* Include padding and border in the element's total width and height */
+}
+
+/* Input field focus styling */
+.login-container input:focus {
+  border-color: #f794ba;          /* Change border color on focus */
+  outline: none;                  /* Remove default outline */
+  box-shadow: 0 0 5px rgba(247, 148, 186, 0.5); /* Subtle shadow for focus effect */
+}
+
+/* Link styling */
+.login-container a {
+  color: #f794ba;                 /* Link color */
+  text-decoration: none;          /* Remove underline */
+}
+
+.login-container a:hover {
+  text-decoration: underline;     /* Underline on hover */
+}
+
+/* Optional: Add some spacing below the form */
+.login-container p {
+  text-align: center;             /* Center the text */
+  margin-top: 20px;               /* Space above the text */
+}
+
+/* Profile container styling */
+.profile-container {
+  max-width: 800px;               /* Maximum width for the profile container */
+  margin: 0 auto;                 /* Center the container horizontally */
+  padding: 20px;                  /* Padding inside the container */
+  background: #ffffff;            /* Background color */
+  border-radius: 10px;            /* Rounded corners */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
+
+/* Profile content layout */
+.profile-content {
+  display: flex;                  /* Arrange items side by side */
+  align-items: center;            /* Vertically center the items */
+  gap: 20px;                      /* Space between profile icon and details */
+}
+
+/* Profile icon styling */
+.profile-icon img {
+  width: 150px;                   /* Set a fixed width for the icon */
+  height: 150px;                  /* Set a fixed height for the icon */
+  border-radius: 50%;             /* Make the icon circular */
+  object-fit: cover;              /* Cover the entire area */
+}
+
+/* Profile details styling */
+.profile-details {
+  flex: 1;                        /* Take up remaining space */
+}
+
+.profile-details h3 {
+  font-size: 24px;                /* Font size for the user's name */
+  margin-bottom: 10px;            /* Space below the name */
+  color: #333;                    /* Text color */
+}
+
+.profile-details p {
+  font-size: 16px;                /* Font size for the email and bio */
+  margin-bottom: 5px;             /* Space below each paragraph */
+  color: #666;                    /* Lighter text color for email and bio */
+}
+
+/* Profile bio styling */
+.profile-bio {
+  font-style: italic;             /* Italic style for the bio */
+}
+
+/* Profile actions styling */
+.profile-actions {
+  margin-top: 20px;               /* Space above the buttons */
+}
+
+.profile-actions .button1 {
+  display: inline-block;          /* Ensure buttons fit their content */
+  margin-right: 10px;             /* Space between the buttons */
+}
+@keyframes upDown {
+  0%, 100% {
+    transform: translateY(0); /* Start and end at the original position */
+  }
+  50% {
+    transform: translateY(-10px); /* Move up 10px at the midpoint */
+  }
+}
+@keyframes spin {
+  0% {
+    transform: rotate(180deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+.profile-container {
+  margin-bottom: 20px;  /* Adds space below the profile section */
+}
+.create-group-container {
+  font-family: "Lora", serif;
+  max-width: 500px;                /* Maximum width for the form container */
+  margin: 0 auto;                  /* Center the form container horizontally */
+  padding: 20px;                   /* Add padding inside the container */
+  background: #ffffff;             /* Background color for the form container */
+  border-radius: 10px;             /* Rounded corners for the form container */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
+
+.create-group-container h2 {
+  font-size: 24px;                 /* Font size for the heading */
+  margin-bottom: 20px;             /* Space below the heading */
+  color: #f794ba;                  /* Heading color */
+  text-align: center;              /* Center the heading text */
+}
+
+.create-group-form {
+  display: flex;
+  flex-direction: column;          /* Stack form elements vertically */
+  gap: 15px;                       /* Space between form elements */
+}
+
+/* Label styling */
+.create-group-form label {
+  font-size: 16px;                 /* Font size for labels */
+  margin-bottom: 5px;              /* Space below the label */
+  color: #333333;                  /* Label color */
+}
+
+/* Input and textarea field styling */
+.create-group-form input[type="text"],
+.create-group-form input[type="email"],
+.create-group-form textarea {
+  font-family: 'Lora', serif;
+  width: 100%;                     /* Full width of the input field */
+  padding: 10px;                   /* Padding inside the input field */
+  font-size: 16px;                 /* Font size for input text */
+  border: 1px solid #cccccc;       /* Light border color */
+  border-radius: 5px;              /* Rounded corners for input fields */
+  box-sizing: border-box;          /* Include padding and border in the element's total width and height */
+}
+
+/* Input field focus styling */
+.create-group-form input:focus,
+.create-group-form textarea:focus {
+  font-family: 'Lora', serif;
+  border-color: #f794ba;           /* Change border color on focus */
+  outline: none;                   /* Remove default outline */
+  box-shadow: 0 0 5px rgba(247, 148, 186, 0.5); /* Subtle shadow for focus effect */
+}
+
+/* Button styling */
+.create-group-form button {
+  display: inline-block;           /* Ensure the button fits its content */
+  padding: 10px 20px;              /* Add padding inside the button */
+  font-size: 16px;                 /* Set the font size */
+  font-weight: bold;               /* Make the font bold */
+  color: #ffffff;                  /* Set the text color */
+  background-color: #f794ba;       /* Set the background color */
+  border: none;                    /* Remove default border */
+  border-radius: 25px;             /* Make the button rounded */
+  cursor: pointer;                 /* Change cursor to pointer on hover */
+  text-align: center;              /* Center the text inside the button */
+  transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth transitions */
+}
+
+/* Button hover effect */
+.create-group-form button:hover {
+  background-color: #e67e9c;       /* Slightly darker background on hover */
+  transform: scale(1.05);          /* Slightly increase the button size */
+}
+
+/* Button active effect */
+.create-group-form button:active {
+  background-color: #d55b89;       /* Even darker background when the button is pressed */
+  transform: scale(0.95);          /* Slightly decrease the button size */
 }
