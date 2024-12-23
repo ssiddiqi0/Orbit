@@ -8,14 +8,16 @@ const Profile = () => {
   const [groupName, setGroupName] = useState('');
   const [groupDescription, setGroupDescription] = useState('');
   const [groupMembers, setGroupMembers] = useState('');
+  const [error, setError] = useState(null);  // For error handling
+  const [successMessage, setSuccessMessage] = useState(''); // For success feedback
 
   const navigate = useNavigate();
 
+  // Fetch user profile
   useEffect(() => {
     const fetchUserProfile = async () => {
       const token = localStorage.getItem('authToken');
       if (!token) {
-        console.group("No token\n");
         navigate('/home');
         return;
       }
@@ -27,13 +29,11 @@ const Profile = () => {
             'Authorization': `Bearer ${token}`,
           },
         });
-        console.log("Response waiting\n");
-        if (response.ok) {
 
+        if (response.ok) {
           const data = await response.json();
           setUser(data);
         } else {
-          console.log("Didn't go to profile");
           navigate('/home');
         }
       } catch (err) {
@@ -45,6 +45,7 @@ const Profile = () => {
     fetchUserProfile();
   }, [navigate]);
 
+  // Handle group creation
   const handleCreateGroup = async (e) => {
     e.preventDefault();
 
@@ -54,10 +55,24 @@ const Profile = () => {
       return;
     }
 
+    // Decode the JWT to get the user's ID
+    const base64Url = token.split('.')[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split('')
+        .map(function (c) {
+          return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        })
+        .join('')
+    );
+    const userId = JSON.parse(jsonPayload).id;
+
     const groupData = {
       name: groupName,
       description: groupDescription,
-      members: groupMembers.split(','),
+      members: groupMembers.split(',').map(email => email.trim()),  // Split and trim emails
+      admins: [userId],  // Automatically make the creator the admin
     };
 
     try {
@@ -71,15 +86,18 @@ const Profile = () => {
       });
 
       if (response.ok) {
-        console.log('Group created successfully');
+        setSuccessMessage('Group created successfully');
         setShowCreateGroupForm(false);
         setGroupName('');
         setGroupDescription('');
         setGroupMembers('');
+        setError(null);  // Reset errors
       } else {
-        console.error('Error creating group');
+        const errorData = await response.json();
+        setError(errorData.error || 'Error creating group');
       }
     } catch (err) {
+      setError('Server error, please try again later');
       console.error('Error:', err);
     }
   };
@@ -147,6 +165,8 @@ const Profile = () => {
                 onChange={(e) => setGroupMembers(e.target.value)}
               />
             </div>
+            {error && <p className="error-message">{error}</p>}  {/* Error handling */}
+            {successMessage && <p className="success-message">{successMessage}</p>}  {/* Success message */}
             <button type="submit" className="button1">Create</button>
           </form>
         </div>

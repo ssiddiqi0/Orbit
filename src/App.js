@@ -23,8 +23,10 @@ function HomePage() {
       // Redirect to the profile page
       navigate('/profile');
     } catch (error) {
+      alert("User not found");
       console.error('Login failed:', error.response ? error.response.data : 'Server error');
     }
+    
   };
 
   return (
