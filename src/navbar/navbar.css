@@ -161,6 +161,6 @@ body, html, #root, .App {
 .content {
     padding: 60px;
     margin: auto;
-    max-width: 800px;
+    max-width: 90%;
     padding-top: 120px; /* Adjust for the top navbar */
 }
