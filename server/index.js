@@ -69,7 +69,7 @@ app.get('/profile', authenticateToken, async (req, res) => {
   try {
     const user = await User.findById(req.user.id);
     if (!user) return res.status(404).send('User not found');
-    res.json({ name: user.name, email: user.email });
+    res.json({ name: user.name, email: user.email, profilePicture: user.profilePicture });
   } catch (err) {
     res.status(500).send('Error fetching user profile');
   }

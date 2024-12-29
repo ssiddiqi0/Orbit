@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../navbar/navbar';
+import styles from './profile.css';
 
 const Profile = () => {
   const [user, setUser] = useState(null);
@@ -77,6 +78,16 @@ const Profile = () => {
     fetchGroups();
   }, [navigate]);
 
+  const handleViewProfile = () => {
+    console.log("View Profile clicked");
+    // Redirect or open a modal for viewing the profile
+  };
+  
+  const handleEditProfile = () => {
+    console.log("Edit Profile clicked");
+    // Redirect to edit profile page or open a modal
+  };
+  
 // Handle group creation
 const handleCreateGroup = async (e) => {
   e.preventDefault();
@@ -171,8 +182,15 @@ const handleCreateGroup = async (e) => {
       {user ? (
         <div className="profile-content">
           <div className="profile-icon">
-            <img src="https://i.pinimg.com/564x/81/70/7e/81707e9a95a49d5b3cd94a7ba3d71a22.jpg" alt="Profile Icon" />
-          </div>
+            <img src={user.profilePicture}
+                alt="Profile"
+                className="profile-photo"
+              />
+              <div className="hover-options">
+                <button onClick={handleViewProfile}>View</button>
+                <button onClick={handleEditProfile}>Edit</button>
+              </div>
+            </div>
           <div className="profile-details">
             <h3>{user.name}</h3>
             <p>{user.email}</p>

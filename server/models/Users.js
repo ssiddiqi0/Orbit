@@ -15,7 +15,10 @@ const UserSchema = new Schema({
     type: String,
     required: true,
   },
-
+  profilePicture: {
+    type: String,
+    default: 'https://i.pinimg.com/564x/81/70/7e/81707e9a95a49d5b3cd94a7ba3d71a22.jpg'
+  }
 
 });
 

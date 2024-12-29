@@ -1,0 +1,230 @@
+/* Profile Page */
+.profile-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .profile-content {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  
+  .profile-icon {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    margin: 0 auto;
+  }
+  
+  .profile-photo {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+  }
+  
+  .hover-options {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    border-radius: 50%;
+   
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 16px;
+    gap: 10px;
+    z-index: 1;
+  }
+  
+  div.profile-icon:hover > div.hover-options {
+    display: flex;
+  }
+  
+  .hover-options button {
+    background-color: transparent;
+    border: 1px solid white;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  
+  .hover-options button:hover {
+    background-color: white;
+    color: black;
+  }
+  
+  .profile-details {
+    flex: 1;
+  }
+  
+  .profile-details h3 {
+    font-size: 24px;
+    margin-bottom: 10px;
+    color: #333;
+  }
+  
+  .profile-details p {
+    font-size: 16px;
+    margin-bottom: 5px;
+    color: #666;
+  }
+  
+  .profile-bio {
+    font-style: italic;
+  }
+  
+  .profile-actions {
+    margin-top: 20px;
+  }
+  
+  .profile-actions .button1 {
+    display: inline-block;
+    margin-right: 10px;
+  }
+  
+  .profile-page {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+  }
+  
+  .profile-main {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    flex: 1;
+  }
+  
+
+/* Sidebar Styling */
+.view-groups {
+    width: 250px;
+    margin-top: 0;
+    background-color: rgba(161, 155, 155, 0.1);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    height: calc(100vh - 100px);
+    overflow-y: auto;
+  }
+  
+  .groups-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .group-item {
+    background-color: rgba(255, 236, 255, 0.723);
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+  }
+  
+  .group-item:hover {
+    transform: scale(1.03);
+    background-color: rgba(240, 240, 240, 1);
+  }
+  
+  .group-item h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .group-item p {
+    margin: 5px 0 0;
+    font-size: 14px;
+    color: #666;
+  }
+
+  /* create groups */
+
+.create-group-container {
+    font-family: "Lora", serif;
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .create-group-container h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #f794ba;
+    text-align: center;
+  }
+  
+  .create-group-form {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  
+  .create-group-form label {
+    font-size: 16px;
+    margin-bottom: 5px;
+    color: #333333;
+  }
+  
+  .create-group-form input[type="text"],
+  .create-group-form input[type="email"],
+  .create-group-form textarea {
+    font-family: 'Lora', serif;
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #cccccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+  }
+  
+  .create-group-form input:focus,
+  .create-group-form textarea:focus {
+    border-color: #f794ba;
+    outline: none;
+    box-shadow: 0 0 5px rgba(247, 148, 186, 0.5);
+  }
+  
+  .create-group-form button {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #ffffff;
+    background-color: #f794ba;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+  }
+  
+  .create-group-form button:hover {
+    background-color: #e67e9c;
+    transform: scale(1.05);
+  }
+  
+  .create-group-form button:active {
+    background-color: #d55b89;
+    transform: scale(0.95);
+  }
