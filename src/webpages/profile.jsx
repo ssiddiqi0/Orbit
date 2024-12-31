@@ -148,113 +148,111 @@ const handleCreateGroup = async (e) => {
 };
 
 
-  return (
-    <>
-      <Navbar />
-      <div className="profile-page">
-  {/* Sidebar: View Groups */}
-  <div className="view-groups">
-  <h1>View Groups</h1>
-  {groups.length > 0 ? (
-    <div className="groups-container">
-      {groups.map((group) => (
-        <div
-          key={group._id}
-          className="group-item"
-          onClick={() => navigate(`/group/${group._id}`)} // Navigate to the group details page
-        >
-          <h3>{group.name}</h3>
-          <p>{group.description}</p>
-        </div>
-      ))}
-    </div>
-  ) : (
-    <p>No groups found.</p>
-  )}
-</div>
-
-
-  {/* Main Profile Section */}
-  <div className="profile-main">
-    {/* Profile Content */}
-    <div className="profile-container">
-      <h2>Profile</h2>
-      {user ? (
-        <div className="profile-content">
-          <div className="profile-icon">
-            <img src={user.profilePicture}
-                alt="Profile"
-                className="profile-photo"
-              />
-              <div className="hover-options">
-                <button onClick={handleViewProfile}>View</button>
-                <button onClick={handleEditProfile}>Edit</button>
+return (
+  <>
+    <Navbar />
+    <div className="profile-page">
+      {/* Sidebar: View Groups */}
+      <div className="view-groups">
+        <h1>Your Groups</h1>
+        {groups.length > 0 ? (
+          <div className="groups-container">
+            {groups.map((group) => (
+              <div
+                key={group._id}
+                className="group-item"
+                onClick={() => navigate(`/group/${group._id}`)}
+              >
+                <h3>{group.name}</h3>
+                <p>{group.description}</p>
               </div>
-            </div>
-          <div className="profile-details">
-            <h3>{user.name}</h3>
-            <p>{user.email}</p>
-            <p className="profile-bio">This is a short bio or tagline about the user.</p>
+            ))}
           </div>
-          <div className="profile-actions">
-            <button
-              onClick={() => setShowCreateGroupForm(!showCreateGroupForm)}
-              className="button1"
-            >
-              {showCreateGroupForm ? 'Cancel' : 'Create Group'}
-            </button>
-          </div>
-        </div>
-      ) : (
-        <p>Loading...</p>
-      )}
-    </div>
-
-    {/* Create Group Form */}
-    {showCreateGroupForm && (
-      <div className="create-group-container">
-        <form className="create-group-form" onSubmit={handleCreateGroup}>
-          <div>
-            <label htmlFor="group-name">Group Name</label>
-            <input
-              id="group-name"
-              type="text"
-              value={groupName}
-              onChange={(e) => setGroupName(e.target.value)}
-              required
-            />
-          </div>
-          <div>
-            <label htmlFor="group-description">Description</label>
-            <textarea
-              id="group-description"
-              value={groupDescription}
-              onChange={(e) => setGroupDescription(e.target.value)}
-              placeholder="Describe your group"
-            />
-          </div>
-          <div>
-            <label htmlFor="group-members">Invite Members (comma-separated emails)</label>
-            <input
-              id="group-members"
-              type="text"
-              value={groupMembers}
-              onChange={(e) => setGroupMembers(e.target.value)}
-            />
-          </div>
-          {error && <p className="error-message">{error}</p>}
-          {successMessage && <p className="success-message">{successMessage}</p>}
-          <button type="submit" className="button1">
-            Create
-          </button>
-        </form>
+        ) : (
+          <p>No groups found.</p>
+        )}
       </div>
-    )}
-  </div>
-</div>
 
-    </>
-  );
+      {/* Main Profile Section */}
+      <div className="profile-main">
+        <div className="profile-container">
+          {user ? (
+            <>
+              <div className="profile-icon">
+                <img
+                  src={user.profilePicture || "default-profile-pic.jpg"}
+                  alt="Profile"
+                  className="profile-photo"
+                />
+                <div className="hover-options">
+                  <button onClick={handleViewProfile}>View</button>
+                  <button onClick={handleEditProfile}>Edit</button>
+                </div>
+              </div>
+              <h1 className="profile-name">My name is {user.name}</h1>
+              <div className="profile-details">
+                <p className="profile-email">Email: {user.email}</p>
+                <p className="profile-bio">
+                  {user.bio || "This is a short bio about the user."}
+                </p>
+              </div>
+              <div className="profile-actions">
+                <button
+                  onClick={() => setShowCreateGroupForm(!showCreateGroupForm)}
+                  className="button1"
+                >
+                  {showCreateGroupForm ? "Cancel" : "Create Group"}
+                </button>
+                <button className="button1">Edit Profile</button>
+              </div>
+            </>
+          ) : (
+            <p>Loading...</p>
+          )}
+        </div>
+
+        {/* Create Group Form */}
+        {showCreateGroupForm && (
+          <div className="create-group-container">
+            <form className="create-group-form" onSubmit={handleCreateGroup}>
+              <label htmlFor="group-name">Group Name</label>
+              <input
+                id="group-name"
+                type="text"
+                value={groupName}
+                onChange={(e) => setGroupName(e.target.value)}
+                required
+              />
+              <label htmlFor="group-description">Description</label>
+              <textarea
+                id="group-description"
+                value={groupDescription}
+                onChange={(e) => setGroupDescription(e.target.value)}
+                placeholder="Describe your group"
+              />
+              <label htmlFor="group-members">
+                Invite Members (comma-separated emails)
+              </label>
+              <input
+                id="group-members"
+                type="text"
+                value={groupMembers}
+                onChange={(e) => setGroupMembers(e.target.value)}
+              />
+              {error && <p className="error-message">{error}</p>}
+              {successMessage && (
+                <p className="success-message">{successMessage}</p>
+              )}
+              <button type="submit" className="button1">
+                Create
+              </button>
+            </form>
+          </div>
+        )}
+      </div>
+    </div>
+  </>
+);
 };
 
 export default Profile;

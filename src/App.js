@@ -6,6 +6,7 @@ import pinkplanet from './photos/pink-planet.png';
 import './App.css';
 import Profile from './webpages/profile';
 import CreateProfile from './webpages/createProfile';
+import GroupPage from './webpages/GroupPage'
 
 function HomePage() {
   const [email, setEmail] = useState('');
@@ -71,6 +72,7 @@ function App() {
             <Route path="/home" element={<HomePage />} />
             <Route path="/createProfile" element={<CreateProfile />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/group/:groupId" element={<GroupPage />} />
           </Routes>
         </div>
       </div>

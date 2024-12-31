@@ -1,8 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Lora:ital,wght@0,400..700;1,400..700&display=swap');
 
+
+
+
 .App {
   text-align: center;
-  background-image: url("photos/space4.jpg");
+  font-family: 'Lora', serif;;
+  /* background-image: url("photos/dark1.jpg"); */
+  background: linear-gradient(to bottom right, 
+#ad5389,#3c1053);
   background-size: cover; /* Cover the entire background */
   background-repeat: no-repeat; /* Prevent the background from repeating */
   background-attachment: fixed; /* Make the background move with the scroll */
@@ -38,100 +44,181 @@
   color: #61dafb;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+@keyframes upDown {
+  0%, 100% {
+    transform: translateY(0); /* Start and end at the original position */
   }
-  to {
-    transform: rotate(360deg);
+  50% {
+    transform: translateY(-10px); /* Move up 10px at the midpoint */
   }
 }
 
 .planet-image {
-  max-width: 50%; /* Adjust as needed */
+  max-width: 35%; /* Adjust as needed */
   height: auto; /* Maintain aspect ratio */
   display: block;
-  animation: upDown 2s ease-in-out infinite;
+  animation: upDown 2s ease-in-out infinite; /* Apply the animation */
   margin: 0 auto; /* Center the image */
 }
 
-/* General Button Styling */
-.button1 {
+
+/* Profile Page */
+.icon {
+  max-width: 50%;
+  height: 5cm;
+  display: block;
+  margin: 0 auto;
+}
+
+.signup-profile {
+  background:  #b183a2ac;
+  margin: 0 auto;
+  border-radius: 15px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+  padding: 30px;
+  margin-top: 30px;
+  width: 100%;
+  max-width: 600px;
+}
+
+.signup-profile h2 {
+  font-size: 24px;
+  margin-bottom: 15px;
+  color: #fff8fa;
+  text-align: center;            /* Center the heading text */
+}
+
+/* Form styling */
+form {
   font-family: "Lora", serif;
-  display: inline-block;
-  padding: 10px 20px;
-  font-size: 16px;
-  font-weight: bold;
+  display: flex;
+  flex-direction: column;         /* Stack form elements vertically */
+  gap: 15px;                      /* Space between form elements */
+}
+
+/* Label styling */
+label {
+  font-family: "Lora", serif;
+  font-size: 16px;                /* Font size for labels */
+  margin-bottom: 5px;             /* Space below the label */
+  color: #333333;                 /* Label color */
+}
+
+/* Input field styling */
+input[type="text"], 
+input[type="email"], 
+input[type="password"] {
+  font-family: "Lora", serif;
+  width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #888;
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.1); /* Subtle transparency */
+    color: #ffffff;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+    transition: border-color 0.3s ease;  
+  box-sizing: border-box;        /* Include padding and border in the element's total width and height */
+}
+
+/* Input field focus styling */
+input:focus {
+  border-color: #f794ba; /* Pink accent on focus */
+  outline: none;
+}
+
+.button1 {
+  font-family: 'Lora', serif;
+  background: rgba(38, 17, 38, 0.2); /* Same background as the group item */
   color: #ffffff;
-  background-color: #f794ba;
   border: none;
   border-radius: 25px;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: bold;
   cursor: pointer;
-  text-align: center;
-  text-decoration: none;
-  transition: background-color 0.3s ease, transform 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Consistent shadow */
+  transition: transform 0.3s ease, background-color 0.3s ease;
 }
 
 .button1:hover {
-  background-color: #e67e9c;
-  transform: scale(1.05);
+  transform: scale(1.05); /* Same slight zoom effect */
+  background: rgba(255, 236, 255, 0.4); /* Lighter background on hover */
 }
 
 .button1:active {
-  background-color: #d55b89;
-  transform: scale(0.95);
+  transform: translateY(2px); /* Push down effect */
+  background: rgba(255, 236, 255, 0.6); /* Even lighter when pressed */
 }
 
-/* Login Section */
+/* Login stuff */
+/* Login container styling */
 .login-container {
   font-family: "Lora", serif;
-  max-width: 500px;
   margin: 0 auto;
-  padding: 20px;
-  background: #faecff;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  background: #b183a2ac; /* Semi-transparent dark box */
+  border-radius: 20px;
+  padding: 40px 20px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+  width: 100%;
+  max-width: 500px;
 }
 
+/* Heading styling */
 .login-container h2 {
   font-size: 24px;
-  margin-bottom: 20px;
-  color: #f794ba;
-  text-align: center;
+  margin-bottom: 15px;
+  color: #fff8fa;
+  text-align: center;           /* Center the heading text */
 }
 
+/* Form styling */
 .login-container form {
   display: flex;
-  flex-direction: column;
-  gap: 15px;
+  flex-direction: column;         /* Stack form elements vertically */
+  gap: 15px;                      /* Space between form elements */
 }
 
-.login-container input[type="email"],
+
+/* Input field styling */
+.login-container input[type="email"], 
 .login-container input[type="password"] {
-  width: 100%;
-  padding: 10px;
-  font-size: 16px;
-  border: 1px solid #cccccc;
-  border-radius: 5px;
-  box-sizing: border-box;
+  width: 100%;                    /* Full width of the input field */
+  padding: 10px;                 /* Padding inside the input field */
+  font-size: 16px;               /* Font size for input text */
+  border: 1px solid #cccccc;     /* Light border color */
+  border-radius: 5px;            /* Rounded corners for input fields */
+  box-sizing: border-box;        /* Include padding and border in the element's total width and height */
 }
 
+/* Input field focus styling */
 .login-container input:focus {
-  border-color: #f794ba;
-  outline: none;
-  box-shadow: 0 0 5px rgba(247, 148, 186, 0.5);
+  border-color: #f794ba;          /* Change border color on focus */
+  outline: none;                  /* Remove default outline */
+  box-shadow: 0 0 5px rgba(247, 148, 186, 0.5); /* Subtle shadow for focus effect */
 }
-
+.login-container textarea:focus {
+  border-color: #f794ba; /* Pink accent on focus */
+  outline: none;
+}
+.login-container textarea:placeholder {
+  color: #fff6fd; /* Pink color for the placeholder */
+  opacity: 0.8; /* Adjust transparency */
+}
+/* Link styling */
 .login-container a {
-  color: #f794ba;
-  text-decoration: none;
+  color: #0e0106;                 /* Link color */
+  text-decoration: none;          /* Remove underline */
 }
 
 .login-container a:hover {
-  text-decoration: underline;
+  transform: scale(1.05); /* Same slight zoom effect */
+  text-decoration: underline;     /* Underline on hover */
 }
 
+/* Optional: Add some spacing below the form */
 .login-container p {
-  text-align: center;
-  margin-top: 20px;
+  text-align: center;             /* Center the text */
+  margin-top: 20px;               /* Space above the text */
 }

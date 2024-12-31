@@ -119,6 +119,22 @@ app.get('/groups', authenticateToken, async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch groups', details: error.message });
   }
 });
+// Each Group
+// Fetch specific group details
+app.get('/groups/:groupId', authenticateToken, async (req, res) => {
+  const { groupId } = req.params;
+  try {
+    const group = await Group.findById(groupId)
+      .populate('members', 'name email')
+      .populate('admins', 'name email');
+    if (!group) return res.status(404).json({ error: 'Group not found' });
+
+    res.status(200).json(group);
+  } catch (err) {
+    res.status(500).json({ error: 'Error fetching group details', details: err.message });
+  }
+});
+
 
 app.get('/user-groups', authenticateToken, async (req, res) => {
   try {
