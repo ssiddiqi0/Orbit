@@ -49,7 +49,7 @@ const GroupPage = () => {
         {group.members.map((member) => (
           <li key={member._id}>{member.name} ({member.email})</li>
         ))}
-     <h2>Admin: {group.admins}</h2>
+     <h2>Admin: </h2>
     </div>
   );
 };
