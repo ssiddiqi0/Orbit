@@ -12,19 +12,25 @@ app.use(cors());
 const User = require('./models/Users');
 const Group = require('./models/Group');
 
+// Hardcoded MongoDB URI
 const uri = 'mongodb+srv://sabasiddiqi:Houston2024@cluster0.dpv1hqa.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
 mongoose.connect(uri)
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.log(err));
+
+// Hardcoded JWT Secret
+const JWT_SECRET = 'your_hardcoded_jwt_secret';
 
 // Middleware to verify JWT
 function authenticateToken(req, res, next) {
   const token = req.headers.authorization?.split(' ')[1];
   if (!token) return res.status(401).send('No token provided');
 
-  jwt.verify(token, 'your_jwt_secret', (err, user) => {
+  jwt.verify(token, JWT_SECRET, (err, user) => {
     if (err) {
-      console.error('JWT Verification Error:', err);
+      if (err.name === 'TokenExpiredError') {
+        return res.status(401).json({ error: 'Token expired. Please log in again.' });
+      }
       return res.status(403).send('Invalid token');
     }
     req.user = user;
@@ -40,7 +46,7 @@ app.post('/register', async (req, res) => {
     const newUser = new User({ name, email, password: hashedPassword });
     await newUser.save();
 
-    const token = jwt.sign({ id: newUser._id }, 'your_jwt_secret', { expiresIn: '1h' });
+    const token = jwt.sign({ id: newUser._id }, JWT_SECRET, { expiresIn: '1h' });
     res.status(201).json({ token });
   } catch (err) {
     res.status(500).send('Error registering user');
@@ -57,11 +63,24 @@ app.post('/login', async (req, res) => {
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(400).send('Invalid credentials');
 
-    const token = jwt.sign({ id: user._id }, 'your_jwt_secret', { expiresIn: '1h' });
+    const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: '1h' });
     res.json({ token });
   } catch (err) {
     res.status(500).send('Error logging in');
   }
+});
+
+// Token Refresh Endpoint
+app.post('/refresh-token', (req, res) => {
+  const refreshToken = req.body.token;
+  if (!refreshToken) return res.status(401).send('No token provided');
+
+  jwt.verify(refreshToken, JWT_SECRET, (err, user) => {
+    if (err) return res.status(403).send('Invalid token');
+
+    const newToken = jwt.sign({ id: user.id }, JWT_SECRET, { expiresIn: '1h' });
+    res.json({ token: newToken });
+  });
 });
 
 // Protected Profile Route
@@ -119,7 +138,7 @@ app.get('/groups', authenticateToken, async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch groups', details: error.message });
   }
 });
-// Each Group
+
 // Fetch specific group details
 app.get('/groups/:groupId', authenticateToken, async (req, res) => {
   const { groupId } = req.params;
@@ -135,12 +154,10 @@ app.get('/groups/:groupId', authenticateToken, async (req, res) => {
   }
 });
 
-
 app.get('/user-groups', authenticateToken, async (req, res) => {
   try {
     const userId = req.user.id;
 
-    // Find groups where the user is a member or admin
     const groups = await Group.find({
       $or: [
         { members: userId },
@@ -156,7 +173,7 @@ app.get('/user-groups', authenticateToken, async (req, res) => {
   }
 });
 
-const PORT = process.env.PORT || 5002;
+const PORT = 5002; // Hardcoded port
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });

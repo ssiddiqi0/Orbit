@@ -1,13 +1,30 @@
-import React, { useState } from 'react';
-import './navbar.css';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import './navbar.css';
 
 function Navbar() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
+  useEffect(() => {
+    const token = localStorage.getItem('authToken');
+
+    if (token) {
+      try {
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const decodedToken = JSON.parse(atob(base64));
+
+        if (decodedToken.exp * 1000 > Date.now()) {
+          setIsLoggedIn(true); // Token is valid
+        } else {
+          localStorage.removeItem('authToken'); // Token expired, clear it
+        }
+      } catch (error) {
+        console.error('Error decoding token:', error);
+        localStorage.removeItem('authToken'); // Invalid token
+      }
+    }
+  }, []);
 
   return (
     <div className="navbar">
@@ -16,25 +33,18 @@ function Navbar() {
           <Link to="/home">O R B I T</Link>
         </div>
         <div className="navbar-links">
-          <button onClick={toggleMenu} className="menu-button">
-            m e n u
-          </button>
-          <Link to="/profile" className="navbar-link">
-            p r o f i l e
-          </Link>
+          {isLoggedIn && (
+            <>
+              <Link to="/calendar" className="navbar-link">
+                c a l e n d a r
+              </Link>
+              <Link to="/profile" className="navbar-link">
+                p r o f i l e
+              </Link>
+            </>
+          )}
         </div>
       </div>
-
-      {isMenuOpen && (
-        <div className="menu-popup">
-          <button onClick={toggleMenu} className="close-button">X</button>
-          <ul className="menu-list">
-            <li className="menu-item"><Link to="/home">Home</Link></li>
-            <li className="menu-item"><Link to="/item2">Item 2</Link></li>
-            <li className="menu-item"><Link to="/item3">Item 3</Link></li>
-          </ul>
-        </div>
-      )}
     </div>
   );
 }
