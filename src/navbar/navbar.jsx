@@ -1,30 +1,47 @@
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
 import './navbar.css';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 function Navbar() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [groups, setGroups] = useState([]); // Store groups for the dropdown
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false); // Dropdown toggle
+  const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
+    // Check if the user is logged in by verifying the auth token
     const token = localStorage.getItem('authToken');
+    setIsLoggedIn(!!token);
 
+    // Fetch groups if the user is logged in
     if (token) {
-      try {
-        const base64Url = token.split('.')[1];
-        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-        const decodedToken = JSON.parse(atob(base64));
-
-        if (decodedToken.exp * 1000 > Date.now()) {
-          setIsLoggedIn(true); // Token is valid
-        } else {
-          localStorage.removeItem('authToken'); // Token expired, clear it
-        }
-      } catch (error) {
-        console.error('Error decoding token:', error);
-        localStorage.removeItem('authToken'); // Invalid token
-      }
+      fetchGroups();
     }
-  }, []);
+  }, [location]); // Re-run this check on route change
+
+  const fetchGroups = async () => {
+    try {
+      const token = localStorage.getItem('authToken');
+      if (!token) return;
+
+      const response = await fetch('http://localhost:5002/user-groups', {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setGroups(data); // Store the groups
+      } else {
+        console.error('Failed to fetch groups');
+      }
+    } catch (err) {
+      console.error('Error fetching groups:', err);
+    }
+  };
 
   return (
     <div className="navbar">
@@ -35,9 +52,30 @@ function Navbar() {
         <div className="navbar-links">
           {isLoggedIn && (
             <>
-              <Link to="/calendar" className="navbar-link">
-                c a l e n d a r
-              </Link>
+              <div
+                className="navbar-link groups-dropdown"
+                onMouseEnter={() => setIsDropdownOpen(true)}
+                onMouseLeave={() => setIsDropdownOpen(false)}
+              >
+                g r o u p s
+                {isDropdownOpen && (
+                  <div className="dropdown-menu">
+                    {groups.length > 0 ? (
+                      groups.map((group) => (
+                        <div
+                          key={group._id}
+                          className="dropdown-item"
+                          onClick={() => navigate(`/group/${group._id}`)}
+                        >
+                          {group.name}
+                        </div>
+                      ))
+                    ) : (
+                      <p className="dropdown-item">No groups found</p>
+                    )}
+                  </div>
+                )}
+              </div>
               <Link to="/profile" className="navbar-link">
                 p r o f i l e
               </Link>

@@ -131,11 +131,11 @@ const CalendarPage = () => {
 
   return (
     <div className="calendar-page">
-      <h1>My Calendar</h1>
+      <h1>Google Calendar</h1>
       {!isAuthorized ? (
         <div>
           <button className="button1" onClick={handleAuthClick}>
-            Authorize
+            Sign in
           </button>
         </div>
       ) : (

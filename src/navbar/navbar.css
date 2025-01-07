@@ -44,10 +44,12 @@ body, html, #root, .App {
     align-items: center;
 }
 
-/* Menu button */
-.menu-button {
+
+
+/* Profile link */
+.navbar-link {
     text-decoration: none;
-    color: #1f040e;
+    color: #280814;
     font-weight: normal;
     font-size: 18px;
     background: none;
@@ -58,19 +60,6 @@ body, html, #root, .App {
     cursor: pointer;
 }
 
-/* Profile link */
-.navbar-link {
-    text-decoration: none;
-    color: #9a2653;
-    font-weight: normal;
-    font-size: 18px;
-    background: none;
-    font-family: "Lora", serif;
-    border: none;
-    padding: 0;
-    margin-right: 20px; /* Space between menu and profile */
-    cursor: pointer;
-}
 .navbar a:focus, .menu-button:focus {
     outline: none;
 }
@@ -80,82 +69,6 @@ body, html, #root, .App {
     color: #1f040e; /* Same color for all states */
     text-decoration: none !important; /* No underline for any state */
 }
-.menu-button:link, .menu-button:visited, .menu-button:hover, .menu-button:active, .menu-button:focus{
-    color: #1f040e;
-    text-decoration: none;
-}
-
-/* Popup menu styling */
-.menu-popup {
-    position: fixed;
-    top: 60px; /* Position just below the navbar */
-    right: 0;
-    width: 200px;
-    height: 98%;
-    background: rgba(224, 108, 166, 0.708);
-    color: white;
-    padding: 20px;
-    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5);
-    z-index: 1000;
-}
-
-/* Other styles (same as before) */
-.menu-popup ul {
-    list-style: none;
-    padding: 0;
-}
-
-.menu-popup ul li {
-    margin-bottom: 15px;
-}
-
-.menu-popup ul li a {
-    color: white;
-    text-decoration: none;
-}
-
-.menu-popup ul li a:hover {
-    text-decoration: underline;
-}
-
-.menu-item {
-    color: white;
-    margin-bottom: 25px;
-}
-
-.menu-item a {
-    display: block;
-    font-size: 20px;
-    color: white;
-    padding: 30px 0;
-    font-weight: bold;
-    text-decoration: none;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-    transition: background-color 0.3s ease;
-}
-
-.menu-item a:hover {
-    background-color: rgba(255, 255, 255, 0.2);
-    border-radius: 10px;
-    cursor: pointer;
-}
-
-.close-button {
-    position: absolute;
-    bottom: 100px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: none;
-    border: none;
-    color: white;
-    font-size: 30px;
-    cursor: pointer;
-    text-align: center;
-}
-
-.close-button:hover {
-    color: #f794ba;
-}
 
 /* Padding for the content to avoid overlap */
 .content {
@@ -163,4 +76,48 @@ body, html, #root, .App {
     margin: auto;
     max-width: 90%;
     padding-top: 120px; /* Adjust for the top navbar */
+}
+
+/* Dropdown menu styles */
+.groups-dropdown {
+    position: relative; /* Ensure the dropdown menu is positioned relative to this container */
+    display: inline-block; /* Prevents unexpected alignment issues */
+    text-align: center; /* Align the "Groups" text */
+}
+
+.groups-dropdown .dropdown-menu {
+    position: absolute; /* Position the menu relative to the parent container */
+    top: 100%; /* Align directly below the "Groups" word */
+    left: 50%; /* Start from the center of the "Groups" word */
+    transform: translateX(-50%); /* Shift it back by 50% of its width to center align */
+    background-color: #ffffff70; /* Slight transparency for dropdown background */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    z-index: 1000;
+    min-width: 200px; /* Ensure the dropdown has a consistent width */
+    padding: 10px 0;
+    text-align: left; /* Align text inside the dropdown */
+}
+
+/* Dropdown item styling */
+.dropdown-item {
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    font-size: 16px;
+    color: #1f040e; /* Neutral color for dropdown items */
+}
+
+.dropdown-item:hover {
+    background-color: #f0f0f0;
+}
+
+/* Ensure dropdown menu is positioned correctly */
+.groups-dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+/* Hide dropdown menu initially */
+.groups-dropdown .dropdown-menu {
+    display: none;
 }

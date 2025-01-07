@@ -1,0 +1,26 @@
+.toggle-calendar-button {
+    background-color: rgba(38, 17, 38, 0.2);
+    color: #ffffff;
+    border: none;
+    border-radius: 25px;
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease, background-color 0.3s ease;
+  }
+  
+  .toggle-calendar-button:hover {
+    transform: scale(1.05);
+    background: rgba(255, 236, 255, 0.4);
+  }
+  
+  .calendar-container {
+    margin-top: 20px;
+    padding: 10px;
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  

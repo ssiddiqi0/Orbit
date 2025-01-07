@@ -87,6 +87,25 @@ const Profile = () => {
     console.log("Edit Profile clicked");
     // Redirect to edit profile page or open a modal
   };
+  const handleSignOutClick = () =>{
+    // Remove the authentication token from localStorage
+  localStorage.removeItem('authToken');
+
+  // Remove Google API token if using Google services
+  if (window.gapi?.client) {
+    const token = window.gapi.client.getToken();
+    if (token) {
+      window.google.accounts.oauth2.revoke(token.access_token, () => {
+        console.log('Google token revoked');
+      });
+      window.gapi.client.setToken(null);
+      localStorage.removeItem('gapiToken');
+    }
+  }
+
+  // Redirect to the home or login page
+  navigate('/home');
+  }
   
 // Handle group creation
 const handleCreateGroup = async (e) => {
@@ -98,6 +117,7 @@ const handleCreateGroup = async (e) => {
     return;
   }
 
+  // Decode the token to get the admin's email
   const base64Url = token.split('.')[1];
   const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
   const jsonPayload = decodeURIComponent(
@@ -106,13 +126,12 @@ const handleCreateGroup = async (e) => {
       .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
       .join('')
   );
-  const userId = JSON.parse(jsonPayload).id;
+  const adminEmail = JSON.parse(jsonPayload).email;
 
   const groupData = {
     name: groupName,
     description: groupDescription,
-    members: groupMembers.split(',').map((email) => email.trim()),
-    admins: [userId],
+    members: [...groupMembers.split(',').map((email) => email.trim()), adminEmail], // Include admin email
   };
 
   try {
@@ -126,14 +145,11 @@ const handleCreateGroup = async (e) => {
     });
 
     if (response.ok) {
-      const newGroup = await response.json(); // Get the newly created group
+      const newGroup = await response.json();
       setSuccessMessage('Group created successfully');
-      setError(null); // Reset errors
+      setError(null);
 
-      // Update groups list with the new group
       setGroups((prevGroups) => [...prevGroups, newGroup]);
-
-      // Clear the form inputs but keep the form open
       setGroupName('');
       setGroupDescription('');
       setGroupMembers('');
@@ -203,7 +219,10 @@ return (
                 >
                   {showCreateGroupForm ? "Cancel" : "Create Group"}
                 </button>
-                <button className="button1">Edit Profile</button>
+                <button
+                  onClick={() => handleSignOutClick()}
+                 className="button1">Sign Out
+                 </button>
               </div>
             </>
           ) : (

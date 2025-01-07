@@ -32,6 +32,34 @@
     background: #b183a2;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
   }
+  /* Personal Events (Google Calendar) */
+.personal-event {
+    background-color: #4caf50; /* Green for personal events */
+    color: white;
+    border-radius: 5px;
+    border: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Group Events */
+  .group-event {
+    background-color: #f44336; /* Red for group events */
+    color: white;
+    border-radius: 5px;
+    border: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  .not-authorized-container {
+    text-align: center;
+    margin-top: 20px;
+  }
+  
+  .not-authorized-message {
+    color: #ff0000; /* Red color for emphasis */
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
+  
   
   /* Buttons */
   .button1 {
