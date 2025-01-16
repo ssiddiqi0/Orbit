@@ -108,15 +108,17 @@ const GroupPage = () => {
       console.error('Google Auth Error:', response);
       return;
     }
+  
     setIsAuthorized(true);
-
+  
     // Store token in localStorage
     const token = window.gapi.client.getToken();
     localStorage.setItem('gapiToken', JSON.stringify(token));
-
-    fetchEvents();
+  
+    await fetchEvents(); // Fetch personal events from Google Calendar
+    fetchGroupEvents(); // Refresh group events after fetching personal events
   };
-
+  
   const handleAuthClick = () => {
     const token = window.gapi.client.getToken();
     if (!token || token.expires_in < Date.now()) {
@@ -167,6 +169,7 @@ const GroupPage = () => {
       console.error('Error creating mock events:', err);
     }
   };
+
   const fetchEvents = async () => {
     try {
       const response = await window.gapi.client.calendar.events.list({
@@ -179,31 +182,28 @@ const GroupPage = () => {
       });
   
       const items = response.result.items || [];
+  
       const formattedEvents = items.map((event) => ({
         googleEventId: event.id,
-        title: event.summary || 'Busy',
+        title: event.summary || 'No Title',
         start: new Date(event.start.dateTime || event.start.date),
         end: new Date(event.end.dateTime || event.end.date),
-        type: 'personal',
+        type: 'personal', // Mark as personal
       }));
   
-      setEvents((prevEvents) => {
-        const existingEventIds = new Set(prevEvents.map((event) => event.googleEventId));
-        const uniqueNewEvents = formattedEvents.filter((event) => !existingEventIds.has(event.googleEventId));
-        return [...prevEvents, ...uniqueNewEvents];
+      const token = localStorage.getItem('authToken');
+      await fetch(`http://localhost:5002/groups/${groupId}/sync-events`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ events: formattedEvents }),
       });
     } catch (err) {
       console.error('Error fetching events:', err);
-  
-      // Handle UNAUTHENTICATED error
-      if (err.result?.error?.status === 'UNAUTHENTICATED') {
-        console.warn('User is not authenticated with Google Calendar');
-        setIsAuthorized(false); // Set authorization state to false
-        localStorage.removeItem('gapiToken'); // Clear the token from localStorage
-      }
     }
   };
-  
   
   const fetchGroupEvents = async () => {
     try {
@@ -222,12 +222,16 @@ const GroupPage = () => {
           ...event,
           start: new Date(event.start),
           end: new Date(event.end),
-          type: 'group',
+          type: event.type || 'group', // Retain event type
         }));
   
         setEvents((prevEvents) => {
-          const existingEventIds = new Set(prevEvents.map((event) => event.googleEventId || event._id));
-          const uniqueNewEvents = groupEvents.filter((event) => !existingEventIds.has(event.googleEventId || event._id));
+          const existingEventIds = new Set(
+            prevEvents.map((event) => event.googleEventId || event._id)
+          );
+          const uniqueNewEvents = groupEvents.filter(
+            (event) => !existingEventIds.has(event.googleEventId || event._id)
+          );
           return [...prevEvents, ...uniqueNewEvents];
         });
       } else {
@@ -269,9 +273,18 @@ const GroupPage = () => {
         ))}
       </ul>
 
-      <button onClick={() => setShowCalendar(!showCalendar)} className="button1">
-        {showCalendar ? 'Hide Calendar' : 'Show Calendar'}
+      <button
+          onClick={() => {
+            setShowCalendar(!showCalendar);
+            if (!showCalendar) {
+              fetchGroupEvents(); // Refresh group events when showing the calendar
+            }
+          }}
+          className="button1"
+        >
+      {showCalendar ? 'Hide Calendar' : 'Show Calendar'}
       </button>
+
       <button onClick={createMockEvents} className="button1">
   Create Mock Events
 </button>

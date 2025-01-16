@@ -186,16 +186,30 @@ app.get('/user-groups', authenticateToken, async (req, res) => {
 });
 app.get('/groups/:groupId/events', authenticateToken, async (req, res) => {
   const { groupId } = req.params;
+  const userId = req.user.id; // ID of the currently logged-in user
+  const googleAccountId = req.headers['google-account-id']; // Pass this from frontend if needed
 
   try {
-    const events = await Event.find({ group: groupId }).select('start end title').lean();
-    const maskedEvents = events.map((event) => ({ ...event, title: 'Busy' }));
-    res.status(200).json(maskedEvents);
+    // Fetch all events for the group
+    const events = await Event.find({ group: groupId }).lean();
+
+    // Process events to categorize them as personal or group events
+    const processedEvents = events.map((event) => {
+      if (event.user.toString() === userId && event.googleAccountId === googleAccountId) {
+        // Personal event (belongs to the logged-in user's Google account)
+        return { ...event, type: 'personal' };
+      }
+      // Group event (from other users)
+      return { ...event, type: 'group', title: 'Busy' }; // Mask group events as "Busy"
+    });
+
+    res.status(200).json(processedEvents);
   } catch (err) {
     console.error('Error fetching group events:', err);
     res.status(500).json({ error: 'Error fetching events', details: err.message });
   }
 });
+
 
 
 // Save user events to a group
@@ -210,12 +224,11 @@ app.post('/groups/:groupId/sync-events', authenticateToken, async (req, res) => 
   try {
     const userId = req.user.id;
 
-    // Iterate over events and check for duplicates
+    // Filter out duplicate events
     const uniqueEvents = [];
     for (const event of events) {
       const existingEvent = await Event.findOne({
         googleEventId: event.googleEventId,
-        user: userId,
         group: groupId,
       });
 
@@ -224,25 +237,37 @@ app.post('/groups/:groupId/sync-events', authenticateToken, async (req, res) => 
           user: userId,
           group: groupId,
           googleEventId: event.googleEventId,
-          title: 'Busy',
+          title: event.title || 'No Title',
           start: event.start,
           end: event.end,
+          type: 'personal', // Assume these are personal if syncing from Google
         });
       }
     }
 
-    // Bulk insert unique events
+    // Insert unique events
     if (uniqueEvents.length > 0) {
       await Event.insertMany(uniqueEvents);
-      console.log(`Added ${uniqueEvents.length} new events`);
     }
 
-    res.status(200).json({ message: `Synced ${uniqueEvents.length} new events` });
+    // Fetch all events for the group
+    const allEvents = await Event.find({ group: groupId }).lean();
+
+    // Process events: mask as "Busy" for group events or keep personal
+    const processedEvents = allEvents.map((event) => ({
+      ...event,
+      type: event.user.toString() === userId ? 'personal' : 'group',
+      title: event.user.toString() === userId ? event.title : 'Busy', // Mask group events
+    }));
+
+    res.status(200).json(processedEvents);
   } catch (err) {
     console.error('Error syncing events:', err);
     res.status(500).json({ error: 'Error syncing events', details: err.message });
   }
 });
+
+
 app.post('/mock-events', async (req, res) => {
   const { userEmail, groupId } = req.body;
 

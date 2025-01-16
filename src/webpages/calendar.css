@@ -65,6 +65,7 @@
   .button1 {
     background: rgba(38, 17, 38, 0.2); /* Same background as the group item */
     color: #ffffff;
+    margin: 13px;
     border: none;
     border-radius: 25px;
     padding: 12px 24px;
@@ -84,4 +85,6 @@
     transform: translateY(2px); /* Push down effect */
     background: rgba(255, 236, 255, 0.6); /* Even lighter when pressed */
   }
-  
+  ul {
+    list-style-type: none;
+  }

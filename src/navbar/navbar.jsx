@@ -35,6 +35,10 @@ function Navbar() {
       if (response.ok) {
         const data = await response.json();
         setGroups(data); // Store the groups
+      } else if (response.status === 401) {
+        console.error('Unauthorized - logging out');
+        setIsLoggedIn(false);
+        localStorage.removeItem('authToken'); // Clean up invalid token
       } else {
         console.error('Failed to fetch groups');
       }
