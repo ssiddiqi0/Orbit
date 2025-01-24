@@ -10,6 +10,12 @@ const path = require('path');
 app.use(express.json());
 app.use(cors());
 
+const dotenv = require('dotenv');
+const { GoogleGenerativeAI } = require('@google/generative-ai');
+dotenv.config({ path: require('path').resolve(__dirname, '../.env') });
+// Load environment variables
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+
 const User = require('./models/Users');
 const Group = require('./models/Group');
 const Event = require('./models/Event'); 
@@ -454,6 +460,30 @@ app.delete('/profile/photo', authenticateToken, async (req, res) => {
 // Serve uploaded files statically
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
+// GEMINI
+app.post('/api/generate-itinerary', async (req, res) => {
+  const { destination, days } = req.body;
+
+  if (!destination || !days) {
+    return res.status(400).json({ error: 'Destination and number of days are required' });
+  }
+
+  try {
+    // Create the prompt dynamically
+    const prompt = `Plan a ${days}-day trip to ${destination}. Include activities, dining options, travel tips, and must-see landmarks.`;
+
+    // Call Gemini API
+    const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+
+    // Return the generated itinerary
+    res.status(200).json({ itinerary: response.text() });
+  } catch (err) {
+    console.error('Error generating itinerary:', err);
+    res.status(500).json({ error: 'Failed to generate itinerary. Please try again later.' });
+  }
+});
 
 
 const PORT = 5002; // Hardcoded port
