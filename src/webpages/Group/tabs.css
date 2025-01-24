@@ -1,0 +1,52 @@
+.tabs-container {
+  margin-top: 20px;
+  
+}
+
+.tabs-header {
+  display: flex;
+  width: 70%;
+  margin: 0 auto;
+  justify-content: center;
+  gap: 10px;
+  border-bottom: 2px solid #ccc; /* Separates tabs from content */
+  padding-bottom: 5px;
+}
+
+.tab-button {
+  padding: 10px 20px;
+  background-color: rgba(103, 50, 103, 0.9); /* Darker background for better contrast */
+  color: #ffffff; /* White text remains legible */
+  border: 2px solid transparent; /* Border blends with background */
+  border-radius: 10px 10px 0 0; /* Rounded top corners only */
+  font-size: 16px;
+  font-family: 'Lora', serif;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease, border-color 0.3s ease;
+}
+
+.tab-button.active {
+  background-color: #b183a2; /* Highlighted color for active tab */
+  color: #ffffff; /* White text remains legible on active tab */
+  border-color: #b183a2; /* Matches the active background color */
+  border-bottom: 2px solid #b183a2; /* Seamless transition into the content */
+  transform: translateY(2px); /* Slight lift for active tab */
+}
+
+.tab-button:hover {
+  background-color: rgba(177, 131, 162, 0.8); /* Hover with good contrast */
+  border-color: #b183a2;
+}
+
+.tabs-content {
+  margin-top: -2px; /* Aligns with active tab's border */
+  padding: 20px;
+  width: 70%;
+  margin: 0 auto;
+  background-color: rgba(103, 50, 103, 0); /* Darker content area for contrast */
+  border-radius: 0 0 20px 20px; /* Rounded bottom corners */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Consistent shadowing */
+  border: 2px solid #b183a2; /* Matches active tab border */
+  color: #ffffff; /* White text inside content */
+}

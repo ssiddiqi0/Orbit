@@ -6,8 +6,8 @@ import pinkplanet from './photos/pink-planet.png';
 import './App.css';
 import Profile from './webpages/profile';
 import CreateProfile from './webpages/createProfile';
-import GroupPage from './webpages/GroupPage';
-import Calendar from './webpages/calendar';
+import GroupPage from './webpages/Group/GroupPage';
+import Calendar from './webpages/Group/calendar';
 
 function HomePage() {
   const [email, setEmail] = useState('');

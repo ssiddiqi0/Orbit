@@ -1,0 +1,214 @@
+/* General Page Styles */
+.calendar-page {
+    font-family: 'Lora', serif;
+    padding: 20px;
+    text-align: center;
+    /* background: linear-gradient(to bottom right, #2d2f4f, #1e213b); Matching theme */
+    color: #1d0217;
+  }
+  
+  /* Calendar Container */
+  .calendar-container {
+    margin: 20px auto;
+    max-width: 800px;
+    background: #b183a2;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.51);
+  }
+  
+  /* Event List */
+  .events-container {
+    margin: 20px auto;
+    max-width: 600px;
+    text-align: left;
+  }
+  
+  .event-item {
+    padding: 15px;
+    border: 1px solid #fff6fd;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    background: #b183a2;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  }
+  /* Personal Events (Google Calendar) */
+.personal-event {
+    background-color: #4caf50; /* Green for personal events */
+    color: white;
+    border-radius: 5px;
+    border: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Group Events */
+  .group-event {
+    background-color: #f44336; /* Red for group events */
+    color: white;
+    border-radius: 5px;
+    border: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  .not-authorized-container {
+    text-align: center;
+    margin-top: 20px;
+  }
+  
+  .not-authorized-message {
+    color: #ff0000; /* Red color for emphasis */
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
+  
+  
+  /* Buttons */
+  .button1 {
+    background: rgba(38, 17, 38, 0.2); /* Same background as the group item */
+    color: #ffffff;
+    margin: 13px;
+    border: none;
+    border-radius: 25px;
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Consistent shadow */
+    transition: transform 0.3s ease, background-color 0.3s ease;
+  }
+  
+  .button1:hover {
+    transform: scale(1.05); /* Same slight zoom effect */
+    background: rgba(255, 236, 255, 0.4); /* Lighter background on hover */
+  }
+  
+  .button1:active {
+    transform: translateY(2px); /* Push down effect */
+    background: rgba(255, 236, 255, 0.6); /* Even lighter when pressed */
+  }
+  ul {
+    list-style-type: none;
+  }
+  .group-feed-container {
+    margin-top: 20px;
+    padding: 20px;
+    background: rgba(38, 17, 38, 0.2); /* Subtle semi-transparent pink overlay */
+    border-radius: 15px;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4); /* Deeper shadow */
+  }
+  
+  .group-feed-container h3 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #fff6fd; /* Pinkish white to match the theme */
+    text-align: center;
+  }
+  
+  .post-form,
+  .trip-planner {
+    margin-top: 20px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.1); /* Subtle transparency for forms */
+    border: 1px solid #ccc;
+    border-radius: 15px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Soft shadow */
+  }
+  
+  .post-form h3,
+  .trip-planner h3 {
+    font-size: 20px;
+    margin-bottom: 15px;
+    color: #ffffff;
+    text-align: center;
+  }
+  
+  .post-form select,
+  .post-form input,
+  .post-form textarea,
+  .trip-planner input,
+  .trip-planner textarea {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid rgba(255, 236, 255, 0.3); /* Border with subtle pink overlay */
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.1); /* Slight transparency */
+    color: #fff6fd;
+    font-size: 16px;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3); /* Inset shadow for depth */
+    transition: border-color 0.3s ease, background-color 0.3s ease;
+    box-sizing: border-box;
+  }
+  
+  .post-form textarea,
+  .trip-planner textarea {
+    min-height: 80px;
+    resize: vertical;
+  }
+  
+  .post-form textarea::placeholder,
+  .trip-planner textarea::placeholder {
+    color: #fff6fd; /* Light pink placeholder text */
+    opacity: 0.8;
+  }
+  
+  .post-form button,
+  .trip-planner button {
+    display: inline-block;
+    background: rgba(38, 17, 38, 0.2); /* Matching background */
+    color: #ffffff;
+    border: none;
+    border-radius: 25px;
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Consistent shadow */
+    transition: transform 0.3s ease, background-color 0.3s ease;
+  }
+  
+  .post-form button:hover,
+  .trip-planner button:hover {
+    transform: scale(1.05); /* Slight zoom effect */
+    background: rgba(255, 236, 255, 0.4); /* Lighter background on hover */
+  }
+  
+  .post-form button:active,
+  .trip-planner button:active {
+    transform: translateY(2px); /* Press effect */
+    background: rgba(255, 236, 255, 0.6); /* Even lighter when pressed */
+  }
+  
+  .posts-feed {
+    margin-top: 20px;
+    background-color: rgba(38, 17, 38, 0.2); /* Subtle pink overlay */
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4); /* Deeper shadow */
+  }
+  
+  .post-item {
+    margin-bottom: 15px;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.1); /* Subtle transparency */
+    border: 1px solid rgba(255, 236, 255, 0.3); /* Subtle pink border */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Slight shadow for depth */
+  }
+  
+  .post-item h4 {
+    font-size: 18px;
+    margin-bottom: 5px;
+    color: #fff6fd; /* Light pink for headings */
+  }
+  
+  .post-item p {
+    font-size: 16px;
+    margin-bottom: 10px;
+    color: #f0e0f0; /* Softer pink for text */
+  }
+  
+  .post-item small {
+    font-size: 12px;
+    color: #cccccc; /* Light gray for additional info */
+  }
+  

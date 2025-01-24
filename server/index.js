@@ -5,13 +5,25 @@ const cors = require('cors');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const saltRounds = 10;
-
+const multer = require('multer');
+const path = require('path');
 app.use(express.json());
 app.use(cors());
 
 const User = require('./models/Users');
 const Group = require('./models/Group');
 const Event = require('./models/Event'); 
+const Post = require('./models/Post')
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/'); // Save files to the 'uploads' directory
+  },
+  filename: (req, file, cb) => {
+    cb(null, `${Date.now()}-${file.originalname}`);
+  },
+});
+
+const upload = multer({ storage });
 
 // Hardcoded MongoDB URI
 const uri = 'mongodb+srv://sabasiddiqi:Houston2024@cluster0.dpv1hqa.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
@@ -156,8 +168,8 @@ app.get('/groups/:groupId', authenticateToken, async (req, res) => {
   const { groupId } = req.params;
   try {
     const group = await Group.findById(groupId)
-      .populate('members', 'name email')
-      .populate('admins', 'name email');
+      .populate('members', 'name email profilePicture')
+      .populate('admins', 'name email profilePicture');
     if (!group) return res.status(404).json({ error: 'Group not found' });
 
     res.status(200).json(group);
@@ -319,6 +331,128 @@ app.post('/mock-events', async (req, res) => {
     res.status(500).json({ error: 'Internal server error', details: err.message });
   }
 });
+
+app.post('/groups/:groupId/posts', authenticateToken, async (req, res) => {
+  const { groupId } = req.params;
+  const { type, heading, description, pollOptions } = req.body;
+
+  if (type !== 'poll' && !description) {
+    return res.status(400).json({ error: 'Description is required' });
+  }
+
+  try {
+    const newPost = new Post({
+      group: groupId,
+      user: req.user.id,
+      type,
+      heading,
+      description,
+      pollOptions: type === 'poll' ? pollOptions.map((option) => ({ option, votes: 0 })) : undefined,
+    });
+
+    await newPost.save();
+    res.status(201).json(newPost);
+  } catch (err) {
+    console.error('Error creating post:', err);
+    res.status(500).json({ error: 'Failed to create post', details: err.message });
+  }
+});
+
+
+app.get('/groups/:groupId/posts', authenticateToken, async (req, res) => {
+  const { groupId } = req.params;
+
+  try {
+    const posts = await Post.find({ group: groupId }).populate('user', 'name email');
+    res.status(200).json(posts);
+  } catch (err) {
+    console.error('Error fetching posts:', err);
+    res.status(500).json({ error: 'Failed to fetch posts', details: err.message });
+  }
+});
+
+app.post('/posts/:postId/vote', authenticateToken, async (req, res) => {
+  const { postId } = req.params;
+  const { optionId } = req.body; // Option the user voted for
+  const userId = req.user.id; // User's ID from JWT
+
+  try {
+    const post = await Post.findById(postId);
+    if (!post || post.type !== 'poll') {
+      return res.status(400).json({ error: 'Invalid poll post' });
+    }
+
+    // Remove the user from any previous vote
+    post.pollOptions.forEach((option) => {
+      const voterIndex = option.voters.indexOf(userId);
+      if (voterIndex > -1) {
+        option.voters.splice(voterIndex, 1);
+        option.votes -= 1;
+      }
+    });
+
+    // Add the user's vote to the selected option
+    const selectedOption = post.pollOptions.id(optionId);
+    if (!selectedOption) {
+      return res.status(404).json({ error: 'Option not found' });
+    }
+
+    selectedOption.voters.push(userId);
+    selectedOption.votes += 1;
+
+    await post.save();
+    const updatedPost = await Post.findById(postId).populate('user', 'name email');
+    res.status(200).json(updatedPost);
+  } catch (err) {
+    console.error('Error voting:', err);
+    res.status(500).json({ error: 'Failed to vote' });
+  }
+});
+
+app.post('/profile/photo', authenticateToken, upload.single('profilePhoto'), async (req, res) => {
+  const { profilePicture } = req.body;
+
+  try {
+    const user = await User.findById(req.user.id);
+    if (!user) return res.status(404).send('User not found');
+
+    if (req.file) {
+      // If a file is uploaded, use its path
+      user.profilePicture = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+    } else if (profilePicture) {
+      // If a URL is provided, use it
+      user.profilePicture = profilePicture;
+    } else {
+      return res.status(400).json({ error: 'No photo or URL provided' });
+    }
+
+    await user.save();
+    res.json(user);
+  } catch (err) {
+    console.error('Error updating profile photo:', err);
+    res.status(500).send('Error updating profile photo');
+  }
+});
+
+// Endpoint for removing the profile photo
+app.delete('/profile/photo', authenticateToken, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id);
+    if (!user) return res.status(404).send('User not found');
+
+    // Reset profile photo to default
+    user.profilePicture = 'https://i.pinimg.com/564x/81/70/7e/81707e9a95a49d5b3cd94a7ba3d71a22.jpg';
+    await user.save();
+
+    res.json(user);
+  } catch (err) {
+    console.error('Error removing profile photo:', err);
+    res.status(500).send('Error removing profile photo');
+  }
+});
+
+// Serve uploaded files statically
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 
 

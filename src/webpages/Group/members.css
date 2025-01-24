@@ -1,0 +1,75 @@
+/* Members Container */
+.members-container {
+  margin: 20px auto;
+  max-width: 900px;
+  width: 90%;
+  padding: 20px;
+  background: rgba(38, 17, 38, 0.2); /* Matching theme */
+  border-radius: 15px;
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4);
+  text-align: center;
+}
+
+/* Members List */
+.members-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 20px 0;
+}
+
+/* Member Item */
+.member-item {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-bottom: 20px;
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.1); /* Slight transparency */
+  border: 1px solid rgba(255, 236, 255, 0.3);
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.member-item:hover {
+  transform: scale(1.02); /* Subtle zoom effect */
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+}
+
+/* Profile Picture */
+.member-avatar {
+  flex-shrink: 0;
+  margin-right: 15px;
+}
+
+.member-profile-photo {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%; /* Circular image */
+  border: 2px solid rgba(255, 236, 255, 0.3); /* Subtle border */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  object-fit: cover;
+}
+
+/* Member Info */
+.member-info {
+  text-align: left;
+}
+
+.member-name {
+  font-size: 18px;
+  font-weight: bold;
+  color: #fff6fd;
+}
+
+.member-email {
+  font-size: 16px;
+  color: rgba(255, 236, 255, 0.7); /* Softer pink */
+}
+
+.member-role,
+.member-join-date {
+  font-size: 14px;
+  color: rgba(255, 236, 255, 0.5);
+  margin-top: 5px;
+}

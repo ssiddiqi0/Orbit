@@ -10,9 +10,11 @@ const Profile = () => {
   const [groupName, setGroupName] = useState('');
   const [groupDescription, setGroupDescription] = useState('');
   const [groupMembers, setGroupMembers] = useState('');
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [newProfilePhoto, setNewProfilePhoto] = useState('');
   const [error, setError] = useState(null);
   const [successMessage, setSuccessMessage] = useState('');
-
+  const [photoFile, setPhotoFile] = useState(null);
   const navigate = useNavigate();
 
   // Fetch user profile
@@ -78,15 +80,76 @@ const Profile = () => {
     fetchGroups();
   }, [navigate]);
 
-  const handleViewProfile = () => {
-    console.log("View Profile clicked");
-    // Redirect or open a modal for viewing the profile
+  const handleRemovePhoto = async () => {
+    const token = localStorage.getItem('authToken');
+    if (!token) return;
+
+    try {
+      const response = await fetch('http://localhost:5002/profile/photo', {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        const updatedUser = await response.json();
+        setUser(updatedUser);
+        setShowEditModal(false);
+      } else {
+        console.error('Failed to remove profile photo');
+      }
+    } catch (err) {
+      console.error('Error removing profile photo:', err);
+    }
+  };
+
+  const handleEditPhoto = async () => {
+    const token = localStorage.getItem('authToken');
+    if (!token) return;
+
+    const formData = new FormData();
+
+    if (photoFile) {
+      formData.append('profilePhoto', photoFile);
+    } else if (newProfilePhoto) {
+      formData.append('profilePicture', newProfilePhoto);
+    } else {
+      console.error('No photo or URL provided');
+      return;
+    }
+
+    try {
+      const response = await fetch('http://localhost:5002/profile/photo', {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: formData,
+      });
+
+      if (response.ok) {
+        const updatedUser = await response.json();
+        setUser(updatedUser);
+        setShowEditModal(false);
+        setNewProfilePhoto('');
+        setPhotoFile(null);
+      } else {
+        console.error('Failed to save profile photo');
+      }
+    } catch (err) {
+      console.error('Error saving profile photo:', err);
+    }
+  };
+
+  const openEditModal = () => {
+    setNewProfilePhoto(''); // Clear URL input
+    setPhotoFile(null); // Clear file input
+    setShowEditModal(true); // Show modal
   };
   
-  const handleEditProfile = () => {
-    console.log("Edit Profile clicked");
-    // Redirect to edit profile page or open a modal
-  };
+
+
   const handleSignOutClick = () =>{
     // Remove the authentication token from localStorage
   localStorage.removeItem('authToken');
@@ -201,8 +264,8 @@ return (
                   className="profile-photo"
                 />
                 <div className="hover-options">
-                  <button onClick={handleViewProfile}>View</button>
-                  <button onClick={handleEditProfile}>Edit</button>
+                  <button onClick={handleRemovePhoto}>Remove</button>
+                  <button onClick={openEditModal}>Edit</button>
                 </div>
               </div>
               <h1 className="profile-name">My name is {user.name}</h1>
@@ -229,7 +292,58 @@ return (
             <p>Loading...</p>
           )}
         </div>
+        {/* Edit Profile Photo Modal */}
 
+        {showEditModal && (
+            <div className="modal-overlay">
+              <div className="modal-content">
+                <h2>Edit Profile Photo</h2>
+                {/* URL Input */}
+                <label htmlFor="photo-url">Enter Photo URL:</label>
+                <input
+                  id="photo-url"
+                  type="text"
+                  value={newProfilePhoto}
+                  onChange={(e) => setNewProfilePhoto(e.target.value)}
+                  placeholder="Enter image URL"
+                />
+
+                {/* File Upload */}
+                <label htmlFor="photo-upload" className="custom-file-upload">
+                  Choose File
+                </label>
+                <input
+                  id="photo-upload"
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => {
+                    const file = e.target.files[0];
+                    if (file) {
+                      setPhotoFile(file);
+                      const reader = new FileReader();
+                      reader.onload = (e) => {
+                        setNewProfilePhoto(e.target.result); // Display preview
+                      };
+                      reader.readAsDataURL(file);
+                    }
+                  }}
+                />
+
+                {/* Image Preview */}
+                {photoFile && (
+                  <div className="image-preview">
+                    <img src={newProfilePhoto} alt="Preview" />
+                  </div>
+                )}
+
+                <div className="modal-actions">
+                  <button onClick={handleEditPhoto} className="button1">Save</button>
+                  <button onClick={handleRemovePhoto} className="button1">Remove Photo</button>
+                  <button onClick={() => setShowEditModal(false)} className="button1">Cancel</button>
+                </div>
+              </div>
+            </div>
+          )}
         {/* Create Group Form */}
         {showCreateGroupForm && (
           <div className="create-group-container">
