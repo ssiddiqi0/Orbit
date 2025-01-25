@@ -1,6 +1,6 @@
 .tabs-container {
   margin-top: 20px;
-  
+  justify-content: center;
 }
 
 .tabs-header {
@@ -42,11 +42,13 @@
 .tabs-content {
   margin-top: -2px; /* Aligns with active tab's border */
   padding: 20px;
-  width: 70%;
+  width: 100%; /* Ensure full width of container */
+  max-width: 800px; /* Optional: Limit the width */
   margin: 0 auto;
-  background-color: rgba(103, 50, 103, 0); /* Darker content area for contrast */
+  background-color: rgba(103, 50, 103, 0.9); /* Darker content area for contrast */
   border-radius: 0 0 20px 20px; /* Rounded bottom corners */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Consistent shadowing */
   border: 2px solid #b183a2; /* Matches active tab border */
   color: #ffffff; /* White text inside content */
+  overflow: hidden; /* Prevent content from spilling out */
 }

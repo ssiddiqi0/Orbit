@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import Tabs from './tabs'; // Assuming you created a Tabs component
 import Calendar from './calendar'; // Calendar component
 import Feed from './Feed'; // Feed component
-import PlanTrip from './PlanTrip'; // Plan Your Trip component
+import ItineraryList from './ItineraryList'; // Itinerary List componentt
 import Members from './Members'; // Members component
 import './group-page.css'; // Your styles
 
@@ -12,6 +12,7 @@ const GroupPage = () => {
   const [group, setGroup] = useState(null);
   const [posts, setPosts] = useState([]);
   const [events, setEvents] = useState([]);
+
   const navigate = useNavigate();
 
   // Fetch group details
@@ -105,11 +106,17 @@ const GroupPage = () => {
   };
 
 
+
+ 
   // Define tabs for the group
   const tabs = [
     { name: 'Calendar', label: 'Calendar', component: <Calendar groupId={groupId} events={events} fetchGroupEvents={fetchGroupEvents} /> },
     { name: 'Feed', label: 'Feed', component: <Feed groupId={groupId} posts={posts} fetchPosts={fetchPosts} updatePost={updatePost} /> },
-    { name: 'Plan', label: 'Plan Your Trip', component: <PlanTrip groupId={groupId} /> },
+    {
+      name: 'Plan',
+      label: 'Plan Your Trip',
+      component: <ItineraryList groupId={groupId} />, // Use ItineraryList
+    },
     { name: 'members', label: 'Members', component: <Members 
     members={group?.members || []} 
     admins={group?.admins || []} 

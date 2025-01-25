@@ -5,9 +5,17 @@
     padding: 20px;
     background: rgba(38, 17, 38, 0.2); /* Matching theme */
     border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center content horizontally */
+    justify-content: flex-start; /* Align content at the top */
+    gap: 20px; /* Add spacing between children */
     box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4);
     text-align: center;
-}
+    overflow: hidden; /* Prevent content overflow */
+    box-sizing: border-box; /* Include padding in width/height */
+  }
+  
 
 .plan-trip-container h2 {
     color: #ffffff; /* Light pink for headings */
@@ -26,7 +34,7 @@
 .input-container input {
     width: 100%;
     padding: 12px;
-
+    font-family: 'Lora', serif;
     margin-bottom: 15px;
     border-radius: 8px;
     border: 1px solid rgba(255, 236, 255, 0.3); /* Light pink border */
@@ -61,6 +69,7 @@
     font-size: 16px;
     margin-top: 10px;
     text-align: left;
+
 }
 
 /* Button Styles */
@@ -92,22 +101,23 @@
 .itinerary {
     text-align: left;
     margin-top: 20px;
+    justify-content: center;
     padding: 20px;
-    background: rgba(38, 17, 38, 0.4); /* Subtle background */
+
     border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+
     color: #ffffff;
     font-family: 'Lora', serif;
 }
 
 /* Day Title */
 .day-title {
-    font-size: 28px;
-    color: #ffd1dc; /* Light pink for day headings */
-    margin-top: 30px;
-    margin-bottom: 20px;
-    text-align: center;
-    text-transform: uppercase;
+    font-size: 24px;
+  font-weight: bold;
+  color: #f794ba; /* Match the title color */
+  margin-top: 30px;
+  margin-bottom: 20px;
+  text-transform: uppercase; /* Uppercase for emphasis */
     border-bottom: 2px solid #f794ba; /* Add an underline for separation */
 }
 
@@ -122,9 +132,11 @@
 /* Itinerary Item (Indented List) */
 .itinerary-item {
     font-size: 16px;
-    color: #fff6fd;
-    margin-left: 20px; /* Indented for better hierarchy */
-    margin-bottom: 8px;
+  line-height: 1.8; /* Add spacing between lines */
+  color: #fff6fd; /* Light text for contrast */
+  text-align: center; /* Center text within the item */
+  margin-bottom: 10px; /* Add some spacing between items */
+   
 }
 
 /* General Paragraphs in Itinerary */
@@ -146,3 +158,59 @@
 .day-title + .section-heading {
     margin-top: 20px; /* Add space after the day title */
 }
+
+/* Editable Itinerary Textarea */
+/* Editable Itinerary Textarea */
+.itinerary-editor {
+    width: 100%;
+    height: 300px;
+    font-family: 'Lora', serif;
+    padding: 10px; /* Adds spacing around the text */
+    margin-top: 20px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff6fd;
+    font-size: 16px;
+    border: 1px solid rgba(255, 236, 255, 0.3);
+    resize: none; /* Prevent resizing if not desired */
+    line-height: 1.5;
+    text-align: left; /* Horizontally align text to the left */
+  }
+  
+  .itinerary-editor:focus {
+    outline: none;
+    border-color: #f794ba;
+  }
+  .itinerary-output {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Horizontally center content */
+    justify-content: center; /* Vertically center content */
+    text-align: center; /* Center align text */
+    margin: 20px auto; /* Center output within the parent */
+    max-width: 100%; /* Ensure it doesn't exceed the container */
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.1); /* Subtle background */
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Add depth */
+    overflow-wrap: break-word; /* Ensure long text wraps */
+    word-break: break-word; /* Break overly long words */
+    box-sizing: border-box; /* Include padding in width/height */
+  }
+  
+  
+  /* Title of the Destination */
+  .itinerary-output h3 {
+    font-size: 24px;
+    font-weight: bold;
+    color: #f794ba; /* Pink accent for the title */
+    margin-bottom: 20px;
+  }
+  
+  /* Structured Itinerary Content */
+  .itinerary-output ul {
+    list-style: none; /* Remove bullets for lists */
+    padding: 0; /* Remove padding */
+    margin: 0; /* Remove margin */
+    width: 100%; /* Take full width of container */
+  }

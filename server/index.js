@@ -19,7 +19,8 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 const User = require('./models/Users');
 const Group = require('./models/Group');
 const Event = require('./models/Event'); 
-const Post = require('./models/Post')
+const Post = require('./models/Post');
+const Itinerary = require('./models/Itinerary');
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, 'uploads/'); // Save files to the 'uploads' directory
@@ -462,7 +463,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // GEMINI
 app.post('/api/generate-itinerary', async (req, res) => {
-  const { destination, days } = req.body;
+  const { destination, days, details } = req.body;
 
   if (!destination || !days) {
     return res.status(400).json({ error: 'Destination and number of days are required' });
@@ -470,7 +471,7 @@ app.post('/api/generate-itinerary', async (req, res) => {
 
   try {
     // Create the prompt dynamically
-    const prompt = `Plan a ${days}-day trip to ${destination}. Include activities, dining options, travel tips, and must-see landmarks.`;
+    const prompt = `Plan a ${days}-day trip to ${destination}. Include activities, dining options, travel tips, and must-see landmarks. Here are some additional details to keep in mind about the trip: ${details}`;
 
     // Call Gemini API
     const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
@@ -482,6 +483,88 @@ app.post('/api/generate-itinerary', async (req, res) => {
   } catch (err) {
     console.error('Error generating itinerary:', err);
     res.status(500).json({ error: 'Failed to generate itinerary. Please try again later.' });
+  }
+});
+
+app.post('/groups/:groupId/itineraries', async (req, res) => {
+  const { groupId } = req.params;
+  const { name, content } = req.body;
+
+  if (!name || !content) {
+    return res.status(400).json({ error: 'Name and content are required' });
+  }
+
+  try {
+    const newItinerary = new Itinerary({
+      groupId,
+      name,
+      content,
+    });
+
+    const savedItinerary = await newItinerary.save();
+    res.status(201).json(savedItinerary);
+  } catch (err) {
+    console.error('Error saving itinerary:', err);
+    res.status(500).json({ error: 'Failed to save itinerary' });
+  }
+});
+
+app.get('/groups/:groupId/itineraries', async (req, res) => {
+  const { groupId } = req.params;
+
+  try {
+    const itineraries = await Itinerary.find({ groupId });
+    res.status(200).json(itineraries);
+  } catch (err) {
+    console.error('Error fetching itineraries:', err);
+    res.status(500).json({ error: 'Failed to fetch itineraries' });
+  }
+});
+
+
+app.put('/groups/:groupId/itineraries/:itineraryId', async (req, res) => {
+  const { groupId, itineraryId } = req.params;
+  const { name, content } = req.body;
+
+  if (!name || !content) {
+    return res.status(400).json({ error: 'Name and content are required' });
+  }
+
+  try {
+    const updatedItinerary = await Itinerary.findOneAndUpdate(
+      { _id: itineraryId, groupId },
+      { name, content },
+      { new: true } // Return the updated document
+    );
+
+    if (!updatedItinerary) {
+      return res.status(404).json({ error: 'Itinerary not found' });
+    }
+
+    res.status(200).json(updatedItinerary);
+  } catch (err) {
+    console.error('Error updating itinerary:', err);
+    res.status(500).json({ error: 'Failed to update itinerary' });
+  }
+});
+
+app.delete('/groups/:groupId/itineraries/:itineraryId', async (req, res) => {
+  const { groupId, itineraryId } = req.params;
+
+  try {
+    const deletedItinerary = await Itinerary.findOneAndDelete({
+      _id: itineraryId,
+      groupId,
+    });
+
+    if (!deletedItinerary) {
+      return res.status(404).json({ error: 'Itinerary not found' });
+    }
+
+    res.status(200).json({ message: 'Itinerary deleted successfully' });
+  } catch (err) {
+    console.error('Error deleting itinerary:', err);
+    res.status(500).json({ error: 'Failed to delete itinerary' });
   }
 });
 

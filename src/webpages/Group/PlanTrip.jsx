@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
 import './plantrip.css';
 
-const PlanTrip = () => {
-  const [destination, setDestination] = useState('');
-  const [days, setDays] = useState('');
-  const [itinerary, setItinerary] = useState('');
+const PlanTrip = ({ groupId, initialItinerary, onSaveComplete }) => {
+  const [destination, setDestination] = useState(initialItinerary?.name || '');
+  const [days, setDays] = useState(initialItinerary?.days || '');
+  const [details, setDetails] = useState(initialItinerary?.details || '');
+  const [itinerary, setItinerary] = useState(initialItinerary?.content || '');
+  const [isEditing, setIsEditing] = useState(false); // Starts in view mode
   const [error, setError] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
 
+  // Generate a new itinerary
   const handleGenerateItinerary = async () => {
     if (!destination || !days) {
       setError('Please fill in all fields.');
@@ -14,6 +18,7 @@ const PlanTrip = () => {
     }
 
     setError('');
+    setSuccessMessage('');
     setItinerary('Generating itinerary...');
 
     try {
@@ -22,7 +27,7 @@ const PlanTrip = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ destination, days }),
+        body: JSON.stringify({ destination, days, details }),
       });
 
       if (!response.ok) {
@@ -31,12 +36,50 @@ const PlanTrip = () => {
       }
 
       const data = await response.json();
-      setItinerary(data.itinerary);
+      setItinerary(data.itinerary); // Update itinerary state
     } catch (err) {
       console.error('Error:', err);
       setError('Failed to generate itinerary. Please try again later.');
       setItinerary('');
     }
+  };
+
+  // Save the itinerary (new or edited)
+  const handleSaveItinerary = async () => {
+
+    try {
+      const response = await fetch(
+        initialItinerary
+          ? `http://localhost:5002/groups/${groupId}/itineraries/${initialItinerary._id}`
+          : `http://localhost:5002/groups/${groupId}/itineraries`,
+        {
+          method: initialItinerary ? 'PUT' : 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            name: destination,
+            days,
+            details,
+            content: itinerary,
+          }),
+        }
+      );
+
+      if (response.ok) {
+        setSuccessMessage('Itinerary saved successfully!');
+        if (onSaveComplete) onSaveComplete(); // Notify parent to return to the list
+      } else {
+        setError('Failed to save itinerary.');
+      }
+    } catch (err) {
+      console.error('Error saving itinerary:', err);
+      setError('Error saving itinerary.');
+    }
+  };
+
+  const handleCancelEdit = () => {
+    setIsEditing(false); // Exit edit mode
   };
 
   const renderItinerary = () => {
@@ -72,35 +115,92 @@ const PlanTrip = () => {
     });
   };
 
-  return (
-    <div className="plan-trip-container">
-      <h2>Plan Your Trip</h2>
-      <div className="input-container">
-        <label htmlFor="destination">Destination</label>
-        <input
-          id="destination"
-          type="text"
-          value={destination}
-          onChange={(e) => setDestination(e.target.value)}
-          placeholder="Enter your destination"
-        />
-        <label htmlFor="days">Number of Days</label>
-        <input
-          id="days"
-          type="number"
-          value={days}
-          onChange={(e) => setDays(e.target.value)}
-          placeholder="Enter number of days"
-        />
-      </div>
-      {error && <p className="error-message">{error}</p>}
-      <button onClick={handleGenerateItinerary} className="button1">
-        Generate Itinerary
-      </button>
+
+  const renderViewMode = () => (
+    <div className="container">
+      <h2>Trip to {destination}!</h2>
+      {/* <p><strong>Days:</strong> {days}</p>
+      <p><strong>Details:</strong> {details || 'No additional details provided.'}</p> */}
       <div className="itinerary-output">
         <h3>Generated Itinerary</h3>
-        <div className="itinerary">{renderItinerary()}</div>
+        <ul>{renderItinerary()}</ul>
       </div>
+      <button className="button1" onClick={() => setIsEditing(true)}>
+        Edit
+      </button>
+      <button className="button1" onClick={handleSaveItinerary}>
+        Save Itinerary
+      </button>
+      <button className="button1" onClick={onSaveComplete}>
+        Return to List
+      </button>
+    </div>
+  );
+
+  const renderEditMode = () => (
+    <div className="container">
+      <h2>Edit Itinerary</h2>
+      <textarea
+        value={itinerary}
+        onChange={(e) => setItinerary(e.target.value)}
+        className="itinerary-editor"
+        placeholder="Edit the itinerary details..."
+      />
+      <button className="button1" onClick={handleSaveItinerary}>
+        Save Changes
+      </button>
+      <button className="button1" onClick={handleCancelEdit}>
+        Cancel
+      </button>
+    </div>
+  );
+
+  const renderGenerateForm = () => (
+    <div>
+      <h2>Plan Your Trip</h2>
+      <div className="input-container">
+  <label htmlFor="destination">Destination</label>
+  <input
+    id="destination"
+    type="text"
+    value={destination}
+    onChange={(e) => setDestination(e.target.value)}
+    placeholder="Enter your destination"
+  />
+
+  <label htmlFor="days">Number of Days</label>
+  <input
+    id="days"
+    type="number"
+    value={days}
+    onChange={(e) => setDays(e.target.value)}
+    placeholder="Enter number of days"
+  />
+
+  <label htmlFor="details">Add Specifics</label>
+  <textarea
+    id="details"
+    value={details}
+    onChange={(e) => setDetails(e.target.value)}
+    className="itinerary-editor"
+    placeholder="Enter additional details..."
+  />
+</div>
+
+      <button className="button1" onClick={handleGenerateItinerary}>
+        Generate Itinerary
+      </button>
+      <button className="button1" onClick={onSaveComplete}>
+        Return to List
+      </button>
+    </div>
+  );
+
+  return (
+    <div className="plan-trip-container">
+      {error && <p className="error-message">{error}</p>}
+      {successMessage && <p className="success-message">{successMessage}</p>}
+      {itinerary ? (isEditing ? renderEditMode() : renderViewMode()) : renderGenerateForm()}
     </div>
   );
 };
