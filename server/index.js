@@ -60,18 +60,35 @@ function authenticateToken(req, res, next) {
 
 // User Registration
 app.post('/register', async (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, email, password, confirmPassword } = req.body;
+
+  if (password !== confirmPassword) {
+    return res.status(400).json({ error: 'Passwords do not match.' });
+  }
+
+  // Password strength validation
+  const minLength = 8;
+  const hasUpperCase = /[A-Z]/.test(password);
+  const hasLowerCase = /[a-z]/.test(password);
+  const hasNumber = /\d/.test(password);
+  const hasSpecialChar = /[@$!%*?&]/.test(password);
+
+  if (password.length < minLength || !hasUpperCase || !hasLowerCase || !hasNumber || !hasSpecialChar) {
+    return res.status(400).json({ error: 'Password does not meet security requirements.' });
+  }
+
   try {
-    const hashedPassword = await bcrypt.hash(password, saltRounds);
+    const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = new User({ name, email, password: hashedPassword });
     await newUser.save();
 
     const token = jwt.sign({ id: newUser._id }, JWT_SECRET, { expiresIn: '1h' });
     res.status(201).json({ token });
   } catch (err) {
-    res.status(500).send('Error registering user');
+    res.status(500).json({ error: 'Error registering user' });
   }
 });
+
 
 // User Login
 app.post('/login', async (req, res) => {
@@ -184,6 +201,68 @@ app.get('/groups/:groupId', authenticateToken, async (req, res) => {
     res.status(500).json({ error: 'Error fetching group details', details: err.message });
   }
 });
+
+// ADD and REMOVE Members
+app.post('/groups/:groupId/members', authenticateToken, async (req, res) => {
+  const { groupId } = req.params;
+  const { email } = req.body;
+
+  if (!email) {
+    return res.status(400).json({ error: 'Email is required' });
+  }
+
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    const group = await Group.findById(groupId);
+    if (!group) {
+      return res.status(404).json({ error: 'Group not found' });
+    }
+
+    if (group.members.includes(user._id)) {
+      return res.status(400).json({ error: 'User is already a member' });
+    }
+
+    group.members.push(user._id);
+    await group.save();
+
+    res.status(200).json({ message: 'Member added successfully', newMember: user });
+  } catch (error) {
+    console.error('Error adding member:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+app.delete('/groups/:groupId/members/:memberId', authenticateToken, async (req, res) => {
+  const { groupId, memberId } = req.params;
+  const userId = req.user.id; // Current user ID from token
+
+  if (userId === memberId) {
+    return res.status(400).json({ error: "You can't remove yourself from the group." });
+  }
+
+  try {
+    const group = await Group.findById(groupId);
+    if (!group) {
+      return res.status(404).json({ error: 'Group not found' });
+    }
+
+    if (!group.members.includes(memberId)) {
+      return res.status(400).json({ error: 'User is not a member of this group' });
+    }
+
+    group.members = group.members.filter((id) => id.toString() !== memberId);
+    await group.save();
+
+    res.status(200).json({ message: 'Member removed successfully' });
+  } catch (error) {
+    console.error('Error removing member:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 
 app.get('/user-groups', authenticateToken, async (req, res) => {
   try {

@@ -14,7 +14,7 @@ const GroupPage = () => {
   const [events, setEvents] = useState([]);
 
   const navigate = useNavigate();
-
+  const [currentUserId, setCurrentUserId] = useState(null);
   // Fetch group details
   useEffect(() => {
     const fetchGroup = async () => {
@@ -23,7 +23,16 @@ const GroupPage = () => {
         navigate('/home');
         return;
       }
-
+  
+      let userId = null;
+      try {
+        const decodedToken = JSON.parse(atob(token.split('.')[1])); // Decode JWT payload
+        userId = decodedToken.id; // Assuming user ID is in the token
+        setCurrentUserId(userId);
+      } catch (err) {
+        console.error('Error decoding token:', err);
+      }
+  
       try {
         const response = await fetch(`http://localhost:5002/groups/${groupId}`, {
           method: 'GET',
@@ -31,7 +40,7 @@ const GroupPage = () => {
             Authorization: `Bearer ${token}`,
           },
         });
-
+  
         if (response.ok) {
           const data = await response.json();
           setGroup(data);
@@ -44,9 +53,10 @@ const GroupPage = () => {
         navigate('/profile');
       }
     };
-
+  
     fetchGroup();
   }, [groupId, navigate]);
+  
 
   // Fetch group events
   const fetchGroupEvents = async () => {
@@ -118,8 +128,11 @@ const GroupPage = () => {
       component: <ItineraryList groupId={groupId} />, // Use ItineraryList
     },
     { name: 'members', label: 'Members', component: <Members 
-    members={group?.members || []} 
-    admins={group?.admins || []} 
+    members={group?.members || []}
+        admins={group?.admins || []}
+        currentUserId={currentUserId}
+        groupId={groupId}
+        groupName={group.name}
   />
    },
   ];

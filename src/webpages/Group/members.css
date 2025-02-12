@@ -73,3 +73,33 @@
   color: rgba(255, 236, 255, 0.5);
   margin-top: 5px;
 }
+  /* Buttons */
+  .button1 {
+    background: rgba(38, 17, 38, 0.2); /* Same background as the group item */
+    color: #ffffff;
+    margin: 13px;
+    border: none;
+    border-radius: 25px;
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Consistent shadow */
+    transition: transform 0.3s ease, background-color 0.3s ease;
+  }
+  
+  .button1:hover {
+    transform: scale(1.05); /* Same slight zoom effect */
+    background: rgba(255, 236, 255, 0.4); /* Lighter background on hover */
+  }
+  
+  .button1:active {
+    transform: translateY(2px); /* Push down effect */
+    background: rgba(255, 236, 255, 0.6); /* Even lighter when pressed */
+  }
+  .remove {
+    display: flex;
+    justify-content: flex-end; /* Aligns the button to the right */
+    width: 100%; /* Ensures the div takes up the full width */
+    margin-top: 10px; /* Optional: Adds some spacing above the button */
+  }

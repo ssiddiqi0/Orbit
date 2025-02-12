@@ -7,37 +7,82 @@ function CreateProfile() {
     name: '',
     email: '',
     password: '',
-    id: '',
+    confirmPassword: '',
   });
+
+  const [passwordError, setPasswordError] = useState('');
+  const [confirmPasswordError, setConfirmPasswordError] = useState('');
 
   const navigate = useNavigate();
 
+  const validatePassword = (password) => {
+    const minLength = 8;
+    const hasUpperCase = /[A-Z]/.test(password);
+    const hasLowerCase = /[a-z]/.test(password);
+    const hasNumber = /\d/.test(password);
+    const hasSpecialChar = /[@$!%*?&]/.test(password);
+
+    if (password.length < minLength) return 'Password must be at least 8 characters long.';
+    if (!hasUpperCase) return 'Password must include an uppercase letter.';
+    if (!hasLowerCase) return 'Password must include a lowercase letter.';
+    if (!hasNumber) return 'Password must include a number.';
+    if (!hasSpecialChar) return 'Password must include a special character (@$!%*?&).';
+
+    return '';
+  };
+
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+
+    if (name === 'password') {
+      setPasswordError(validatePassword(value));
+      if (formData.confirmPassword && value !== formData.confirmPassword) {
+        setConfirmPasswordError('Passwords do not match.');
+      } else {
+        setConfirmPasswordError('');
+      }
+    }
+
+    if (name === 'confirmPassword') {
+      if (value !== formData.password) {
+        setConfirmPasswordError('Passwords do not match.');
+      } else {
+        setConfirmPasswordError('');
+      }
+    }
+
+    setFormData({ ...formData, [name]: value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Form Data:', formData); // Log the form data
+
+    if (passwordError || confirmPasswordError) {
+      alert('Please fix the errors before submitting.');
+      return;
+    }
+
+    const { confirmPassword, ...userData } = formData; // Remove confirmPassword before sending
+
     try {
       const response = await fetch('http://localhost:5002/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(userData),
       });
 
       if (response.ok) {
-        const data = await response.json(); // Extract the token
-      localStorage.setItem('authToken', data.token);
-        navigate('/profile'); // Redirect to profile page after successful sign-up
+        const data = await response.json();
+        localStorage.setItem('authToken', data.token);
+        navigate('/profile');
       } else {
         alert('Failed to sign up.');
       }
     } catch (err) {
       console.error(err);
-      alert('Error during sign up.');
+      alert('Error during sign-up.');
     }
   };
 
@@ -57,16 +102,6 @@ function CreateProfile() {
               required
             />
           </div>
-          {/* <div>
-            <label>Unique ID:</label>
-            <input
-              type="text"
-              name="id"
-              value={formData.id}
-              onChange={handleChange}
-              required
-            />
-          </div> */}
           <div>
             <label>Email:</label>
             <input
@@ -86,8 +121,22 @@ function CreateProfile() {
               onChange={handleChange}
               required
             />
+            {passwordError && <p style={{ color: 'red' }}>{passwordError}</p>}
           </div>
-          <button type="submit" className='button1'>Create Profile</button>
+          <div>
+            <label>Confirm Password:</label>
+            <input
+              type="password"
+              name="confirmPassword"
+              value={formData.confirmPassword}
+              onChange={handleChange}
+              required
+            />
+            {confirmPasswordError && <p style={{ color: 'red' }}>{confirmPasswordError}</p>}
+          </div>
+          <button type="submit" className="button1" disabled={!!passwordError || !!confirmPasswordError}>
+            Create Profile
+          </button>
         </form>
       </div>
     </div>
