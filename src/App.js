@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-router-dom';
+import { HashRouter as Router, Route, Routes, useNavigate } from 'react-router-dom';
 import Navbar from './navbar/navbar';
 import axios from 'axios';
 import pinkplanet from './photos/pink-planet.png';
+import { Link } from 'react-router-dom';
 import './App.css';
 import Profile from './webpages/profile';
 import CreateProfile from './webpages/createProfile';
@@ -23,7 +24,7 @@ function HomePage() {
       localStorage.setItem('authToken', token);
 
       // Redirect to the profile page
-      navigate('/profile');
+      navigate('/profile', {replace: true});
     } catch (error) {
       alert("User not found");
       console.error('Login failed:', error.response ? error.response.data : 'Server error');
@@ -56,7 +57,8 @@ function HomePage() {
           />
           <button type="submit" className='button1'>Login</button>
         </form>
-        <p>Don't have an account? <a href="/createProfile">Sign up</a></p>
+        <p>Don't have an account? <Link to="/createProfile">Sign up</Link></p>
+
       </div>
     </div>
   );
