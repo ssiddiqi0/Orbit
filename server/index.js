@@ -62,11 +62,18 @@ function authenticateToken(req, res, next) {
 app.post('/register', async (req, res) => {
   const { name, email, password, confirmPassword } = req.body;
 
+  // Check if passwords match
   if (password !== confirmPassword) {
     return res.status(400).json({ error: 'Passwords do not match.' });
   }
 
-  // Password strength validation
+  // Check if email already exists
+  const existingUser = await User.findOne({ email });
+  if (existingUser) {
+    return res.status(400).json({ error: 'Email already in use. Please use a different email.' });
+  }
+
+  // Password security check
   const minLength = 8;
   const hasUpperCase = /[A-Z]/.test(password);
   const hasLowerCase = /[a-z]/.test(password);
@@ -78,16 +85,22 @@ app.post('/register', async (req, res) => {
   }
 
   try {
+    // Hash password before saving
     const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = new User({ name, email, password: hashedPassword });
+
     await newUser.save();
 
+    // Generate JWT token
     const token = jwt.sign({ id: newUser._id }, JWT_SECRET, { expiresIn: '1h' });
+
     res.status(201).json({ token });
   } catch (err) {
+    console.error('Error registering user:', err);
     res.status(500).json({ error: 'Error registering user' });
   }
 });
+
 
 
 // User Login
