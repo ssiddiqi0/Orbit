@@ -32,8 +32,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-// Hardcoded MongoDB URI
-const uri = 'mongodb+srv://sabasiddiqi:Houston2024@cluster0.dpv1hqa.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
+const uri =process.env.MONGO_URI;
 mongoose.connect(uri)
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.log(err));

@@ -132,7 +132,7 @@ const GroupPage = () => {
         admins={group?.admins || []}
         currentUserId={currentUserId}
         groupId={groupId}
-        groupName={group.name}
+        groupName={group?.name}
   />
    },
   ];
