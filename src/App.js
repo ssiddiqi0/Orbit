@@ -18,7 +18,7 @@ function HomePage() {
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post('http://localhost:5002/login', { email, password });
+      const response = await axios.post('https://orbit-mlj6.onrender.com/login', { email, password });
       const { token } = response.data;
 
       // Store the token
