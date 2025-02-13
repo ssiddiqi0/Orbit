@@ -9,7 +9,7 @@ const multer = require('multer');
 const path = require('path');
 app.use(express.json());
 app.use(cors());
-
+app.use(cors({ origin: "*" })); // Allow all origins (For testing only)
 const dotenv = require('dotenv');
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 dotenv.config({ path: require('path').resolve(__dirname, '../.env') });
