@@ -10,7 +10,7 @@ const Login = () => {
 
   const handleLogin = async () => { // No need to pass email and password here
     try {
-      const response = await axios.post('${process.env.REACT_APP_API_URL}/login', { email, password });
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/login`, { email, password });
       const { token } = response.data;
   
       // Store the token (in localStorage, sessionStorage, or cookie)
