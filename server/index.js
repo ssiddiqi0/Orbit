@@ -16,21 +16,18 @@ const allowedOrigins = [
   'http://localhost:3000', // ✅ Allow Localhost for Development
 ];
 
-app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true); // ✅ Allow request
-    } else {
-      callback(new Error('Not allowed by CORS')); // ❌ Block other origins
-    }
-  },
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  credentials: true, // ✅ Allow cookies & authentication headers
-  allowedHeaders: 'Content-Type,Authorization',
-}));
 
-// Handle Preflight Requests
-app.options('*', cors());
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", allowedOrigins.includes(req.header("Origin")) ? req.header("Origin") : ""); 
+  res.header("Access-Control-Allow-Methods", "GET,HEAD,PUT,PATCH,POST,DELETE");
+  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  res.header("Access-Control-Allow-Credentials", "true");
+  next();
+});
+
+app.options('*', (req, res) => {
+  res.sendStatus(200);
+});
 const dotenv = require('dotenv');
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 dotenv.config({ path: require('path').resolve(__dirname, '../.env') });
