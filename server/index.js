@@ -9,6 +9,7 @@ const fs = require('fs');
 const { DateTime } = require('luxon'); 
 const multer = require('multer');
 const path = require('path');
+const Feedback = require('./models/Feedback');
 app.use(express.json());
 app.use(cors());
 const allowedOrigins = [
@@ -48,8 +49,7 @@ const storage = multer.diskStorage({
   },
 });
 const upload = multer({ storage });
-const feedbackFilePath = path.join(__dirname, 'feedback.txt');
-
+const ACCESS_CODE = "7537";
 const uri =process.env.MONGO_URI;
 mongoose.connect(uri)
   .then(() => console.log('MongoDB connected'))
@@ -77,37 +77,58 @@ function authenticateToken(req, res, next) {
 
 app.post('/feedback', async (req, res) => {
   const { feedback } = req.body;
-
   if (!feedback || feedback.trim() === '') {
     return res.status(400).json({ error: 'Feedback cannot be empty' });
   }
 
-  // Convert to Vancouver time & format as YYYY-MM-DD @ HH:MM AM/PM
-  const formattedDate = DateTime.now()
-    .setZone('America/Vancouver') // Convert to Pacific Time (PST/PDT)
-    .toFormat("yyyy-MM-dd 'at' h:mm a"); // Format: YYYY-MM-DD at HH:MM AM/PM
+  try {
+    const newFeedback = new Feedback({ message: feedback });
+    await newFeedback.save();
 
-  const feedbackEntry = `[${formattedDate}] - ${feedback}\n`;
+    res.status(201).json({ message: 'Feedback submitted successfully!' });
+  } catch (err) {
+    console.error('Error saving feedback:', err);
+    res.status(500).json({ error: 'Failed to submit feedback' });
+  }
+});
 
-  // Append feedback to a text file
-  fs.appendFile(feedbackFilePath, feedbackEntry, (err) => {
-    if (err) {
-      console.error('Error writing to file:', err);
-      return res.status(500).json({ error: 'Failed to submit feedback' });
-    }
-    res.status(201).json({ message: 'Feedback submitted successfully' });
-  });
+app.get('/feedback', async (req, res) => {
+  const { code } = req.query;
+  if (code !== ACCESS_CODE) {
+    return res.status(403).json({ error: "Forbidden: Invalid access code" });
+  }
+
+  try {
+    const feedbackList = await Feedback.find().sort({ timestamp: -1 });
+
+    // ✅ Format feedback as a readable HTML page
+    let feedbackHTML = `
+      <html>
+      <head>
+        <title>Feedback List</title>
+        <style>
+          body { font-family: Arial, sans-serif; padding: 20px; background: #f8f8f8; }
+          h1 { color: #333; }
+          ul { list-style: none; padding: 0; }
+          li { background: white; padding: 10px; margin-bottom: 10px; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+          strong { color: #f794ba; }
+        </style>
+      </head>
+      <body>
+        <h1>Submitted Feedback</h1>
+        <ul>
+          ${feedbackList.map(f => `<li><strong>${new Date(f.timestamp).toLocaleString('en-US', { timeZone: 'America/Vancouver' })}:</strong> ${f.message}</li>`).join('')}
+        </ul>
+      </body>
+      </html>`;
+
+    res.send(feedbackHTML);
+  } catch (err) {
+    console.error('Error retrieving feedback:', err);
+    res.status(500).json({ error: 'Failed to retrieve feedback' });
+  }
 });
-// Retrieve all feedback
-app.get('/feedback', (req, res) => {
-  fs.readFile(feedbackFilePath, 'utf8', (err, data) => {
-    if (err) {
-      console.error('Error reading feedback file:', err);
-      return res.status(500).json({ error: 'Failed to retrieve feedback' });
-    }
-    res.status(200).json({ feedback: data.split('\n').filter((line) => line.trim() !== '') });
-  });
-});
+
 
 // User Registration
 app.post('/register', async (req, res) => {
