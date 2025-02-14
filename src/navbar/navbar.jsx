@@ -25,7 +25,7 @@ function Navbar() {
       const token = localStorage.getItem('authToken');
       if (!token) return;
 
-      const response = await fetch('http://localhost:5002/user-groups', {
+      const response = await fetch('${process.env.REACT_APP_API_URL}/user-groups', {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${token}`,

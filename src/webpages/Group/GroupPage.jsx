@@ -34,7 +34,7 @@ const GroupPage = () => {
       }
   
       try {
-        const response = await fetch(`http://localhost:5002/groups/${groupId}`, {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/groups/${groupId}`, {
           method: 'GET',
           headers: {
             Authorization: `Bearer ${token}`,
@@ -62,7 +62,7 @@ const GroupPage = () => {
   const fetchGroupEvents = async () => {
     try {
       const token = localStorage.getItem('authToken');
-      const response = await fetch(`http://localhost:5002/groups/${groupId}/events`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/groups/${groupId}/events`, {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -97,7 +97,7 @@ const GroupPage = () => {
   const fetchPosts = async () => {
     try {
       const token = localStorage.getItem('authToken');
-      const response = await fetch(`http://localhost:5002/groups/${groupId}/posts`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/groups/${groupId}/posts`, {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${token}`,

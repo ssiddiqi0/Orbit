@@ -27,7 +27,7 @@ const Profile = () => {
       }
 
       try {
-        const response = await fetch('http://localhost:5002/profile', {
+        const response = await fetch('${process.env.REACT_APP_API_URL}/profile', {
           method: 'GET',
           headers: {
             Authorization: `Bearer ${token}`,
@@ -59,7 +59,7 @@ const Profile = () => {
       }
 
       try {
-        const response = await fetch('http://localhost:5002/user-groups', {
+        const response = await fetch('${process.env.REACT_APP_API_URL}/user-groups', {
           method: 'GET',
           headers: {
             Authorization: `Bearer ${token}`,
@@ -85,7 +85,7 @@ const Profile = () => {
     if (!token) return;
 
     try {
-      const response = await fetch('http://localhost:5002/profile/photo', {
+      const response = await fetch('${process.env.REACT_APP_API_URL}/profile/photo', {
         method: 'DELETE',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -120,7 +120,7 @@ const Profile = () => {
     }
 
     try {
-      const response = await fetch('http://localhost:5002/profile/photo', {
+      const response = await fetch('${process.env.REACT_APP_API_URL}/profile/photo', {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -198,7 +198,7 @@ const handleCreateGroup = async (e) => {
   };
 
   try {
-    const response = await fetch('http://localhost:5002/groups', {
+    const response = await fetch('${process.env.REACT_APP_API_URL}/groups', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

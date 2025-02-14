@@ -11,7 +11,7 @@ const ItineraryList = ({ groupId }) => {
   // Fetch itineraries for the group
   const fetchItineraries = async () => {
     try {
-      const response = await fetch(`http://localhost:5002/groups/${groupId}/itineraries`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/groups/${groupId}/itineraries`, {
         method: 'GET',
       });
 
@@ -49,7 +49,7 @@ const ItineraryList = ({ groupId }) => {
   const handleDelete = async (itineraryId) => {
     try {
       const response = await fetch(
-        `http://localhost:5002/groups/${groupId}/itineraries/${itineraryId}`,
+        `${process.env.REACT_APP_API_URL}/groups/${groupId}/itineraries/${itineraryId}`,
         {
           method: 'DELETE',
         }

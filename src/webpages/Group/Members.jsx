@@ -14,7 +14,7 @@ const Members = ({ members = [], admins = [], currentUserId, groupId, groupName 
   const fetchMembers = async () => {
     try {
       const token = localStorage.getItem('authToken');
-      const response = await fetch(`http://localhost:5002/groups/${groupId}`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/groups/${groupId}`, {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -49,7 +49,7 @@ const Members = ({ members = [], admins = [], currentUserId, groupId, groupName 
 
     try {
       const token = localStorage.getItem('authToken');
-      const response = await fetch(`http://localhost:5002/groups/${groupId}/members`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/groups/${groupId}/members`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -84,7 +84,7 @@ const Members = ({ members = [], admins = [], currentUserId, groupId, groupName 
 
     try {
       const token = localStorage.getItem('authToken');
-      const response = await fetch(`http://localhost:5002/groups/${groupId}/members/${memberId}`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/groups/${groupId}/members/${memberId}`, {
         method: 'DELETE',
         headers: {
           Authorization: `Bearer ${token}`,

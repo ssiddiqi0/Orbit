@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/Orbit/static/css/main.883d6f76.css",
+    "main.js": "/Orbit/static/js/main.5a02f54f.js",
+    "static/js/453.26f2b15c.chunk.js": "/Orbit/static/js/453.26f2b15c.chunk.js",
+    "static/media/pink-planet.png": "/Orbit/static/media/pink-planet.24b56f44136d7912b19d.png",
+    "index.html": "/Orbit/index.html",
+    "main.883d6f76.css.map": "/Orbit/static/css/main.883d6f76.css.map",
+    "main.5a02f54f.js.map": "/Orbit/static/js/main.5a02f54f.js.map",
+    "453.26f2b15c.chunk.js.map": "/Orbit/static/js/453.26f2b15c.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.883d6f76.css",
+    "static/js/main.5a02f54f.js"
+  ]
+}

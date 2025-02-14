@@ -22,7 +22,7 @@ const PlanTrip = ({ groupId, initialItinerary, onSaveComplete }) => {
     setItinerary('Generating itinerary...');
 
     try {
-      const response = await fetch('http://localhost:5002/api/generate-itinerary', {
+      const response = await fetch('${process.env.REACT_APP_API_URL}/api/generate-itinerary', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -50,8 +50,8 @@ const PlanTrip = ({ groupId, initialItinerary, onSaveComplete }) => {
     try {
       const response = await fetch(
         initialItinerary
-          ? `http://localhost:5002/groups/${groupId}/itineraries/${initialItinerary._id}`
-          : `http://localhost:5002/groups/${groupId}/itineraries`,
+          ? `${process.env.REACT_APP_API_URL}/groups/${groupId}/itineraries/${initialItinerary._id}`
+          : `${process.env.REACT_APP_API_URL}/groups/${groupId}/itineraries`,
         {
           method: initialItinerary ? 'PUT' : 'POST',
           headers: {

@@ -47,7 +47,7 @@ const Feed = ({ groupId, posts, fetchPosts, updatePost }) => {
 
       try {
   
-        const response = await fetch(`http://localhost:5002/groups/${groupId}/posts`, {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/groups/${groupId}/posts`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -82,7 +82,7 @@ const Feed = ({ groupId, posts, fetchPosts, updatePost }) => {
         }
       
         try {
-          const response = await fetch(`http://localhost:5002/posts/${postId}/vote`, {
+          const response = await fetch(`${process.env.REACT_APP_API_URL}/posts/${postId}/vote`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
