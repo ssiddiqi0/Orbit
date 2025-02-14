@@ -49,7 +49,7 @@ const storage = multer.diskStorage({
   },
 });
 const upload = multer({ storage });
-const ACCESS_CODE = "7537";
+const ACCESS_CODE = process.env.ACCESS_CODE 
 const uri =process.env.MONGO_URI;
 mongoose.connect(uri)
   .then(() => console.log('MongoDB connected'))

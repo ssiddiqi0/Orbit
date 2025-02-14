@@ -10,7 +10,9 @@ const Feed = ({ groupId, posts, fetchPosts, updatePost }) => {
     const [heading, setHeading] = useState(''); // For all post types
     const [description, setDescription] = useState(''); // For tweets/reminders
     const [pollOptions, setPollOptions] = useState(['']); // For polls
-  
+    useEffect(() => {
+      fetchPosts();
+    }, []);
     // Refresh Posts
     const handleRefresh = async () => {
       setRefreshing(true);
