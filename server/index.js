@@ -11,7 +11,26 @@ const multer = require('multer');
 const path = require('path');
 app.use(express.json());
 app.use(cors());
-app.use(cors({ origin: "*" })); // Allow all origins (For testing only)
+const allowedOrigins = [
+  'https://ssiddiqi0.github.io', // ✅ Allow GitHub Pages
+  'http://localhost:3000', // ✅ Allow Localhost for Development
+];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true); // ✅ Allow request
+    } else {
+      callback(new Error('Not allowed by CORS')); // ❌ Block other origins
+    }
+  },
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true, // ✅ Allow cookies & authentication headers
+  allowedHeaders: 'Content-Type,Authorization',
+}));
+
+// Handle Preflight Requests
+app.options('*', cors());
 const dotenv = require('dotenv');
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 dotenv.config({ path: require('path').resolve(__dirname, '../.env') });
