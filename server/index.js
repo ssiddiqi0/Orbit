@@ -5,6 +5,8 @@ const cors = require('cors');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const saltRounds = 10;
+const fs = require('fs');
+const { DateTime } = require('luxon'); 
 const multer = require('multer');
 const path = require('path');
 app.use(express.json());
@@ -29,8 +31,8 @@ const storage = multer.diskStorage({
     cb(null, `${Date.now()}-${file.originalname}`);
   },
 });
-
 const upload = multer({ storage });
+const feedbackFilePath = path.join(__dirname, 'feedback.txt');
 
 const uri =process.env.MONGO_URI;
 mongoose.connect(uri)
@@ -56,6 +58,40 @@ function authenticateToken(req, res, next) {
     next();
   });
 }
+
+app.post('/feedback', async (req, res) => {
+  const { feedback } = req.body;
+
+  if (!feedback || feedback.trim() === '') {
+    return res.status(400).json({ error: 'Feedback cannot be empty' });
+  }
+
+  // Convert to Vancouver time & format as YYYY-MM-DD @ HH:MM AM/PM
+  const formattedDate = DateTime.now()
+    .setZone('America/Vancouver') // Convert to Pacific Time (PST/PDT)
+    .toFormat("yyyy-MM-dd 'at' h:mm a"); // Format: YYYY-MM-DD at HH:MM AM/PM
+
+  const feedbackEntry = `[${formattedDate}] - ${feedback}\n`;
+
+  // Append feedback to a text file
+  fs.appendFile(feedbackFilePath, feedbackEntry, (err) => {
+    if (err) {
+      console.error('Error writing to file:', err);
+      return res.status(500).json({ error: 'Failed to submit feedback' });
+    }
+    res.status(201).json({ message: 'Feedback submitted successfully' });
+  });
+});
+// Retrieve all feedback
+app.get('/feedback', (req, res) => {
+  fs.readFile(feedbackFilePath, 'utf8', (err, data) => {
+    if (err) {
+      console.error('Error reading feedback file:', err);
+      return res.status(500).json({ error: 'Failed to retrieve feedback' });
+    }
+    res.status(200).json({ feedback: data.split('\n').filter((line) => line.trim() !== '') });
+  });
+});
 
 // User Registration
 app.post('/register', async (req, res) => {

@@ -20,10 +20,14 @@ const Members = ({ members = [], admins = [], currentUserId, groupId, groupName 
           Authorization: `Bearer ${token}`,
         },
       });
-
+  
       if (response.ok) {
         const data = await response.json();
-        setMemberList([...data.admins, ...data.members]); // Update the members list
+  
+        // Merge admins and members while removing duplicates
+        const uniqueMembers = [...new Map([...data.members, ...data.admins].map(member => [member._id, member])).values()];
+  
+        setMemberList(uniqueMembers);
       } else {
         throw new Error('Failed to fetch members');
       }
@@ -31,6 +35,7 @@ const Members = ({ members = [], admins = [], currentUserId, groupId, groupName 
       setError(err.message);
     }
   };
+  
 
   // Fetch members when component mounts
   useEffect(() => {

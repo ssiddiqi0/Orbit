@@ -5,6 +5,7 @@
 
 .App {
   text-align: center;
+  align-items: center;
   font-family: 'Lora', serif;;
   /* background-image: url("photos/dark1.jpg"); */
   background: linear-gradient(to bottom right, 
@@ -222,3 +223,4 @@ input:focus {
   text-align: center;             /* Center the text */
   margin-top: 20px;               /* Space above the text */
 }
+

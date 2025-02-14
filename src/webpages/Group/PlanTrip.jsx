@@ -84,25 +84,26 @@ const PlanTrip = ({ groupId, initialItinerary, onSaveComplete }) => {
 
   const renderItinerary = () => {
     if (!itinerary) return null;
-
-    // Parse the itinerary string into structured HTML
+  
     return itinerary.split('\n').map((line, index) => {
-        if (line.startsWith('**Day')) {
-            return <h2 key={index} className="day-title">{line.replace(/\*\*/g, '')}</h2>;
-          } else if (line.startsWith('**')) {
-            return <h4 key={index} className="section-heading">{line.replace(/\*\*/g, '')}</h4>;
-          } else if (line.startsWith('*')) {
-            const boldedLine = line.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace('* ', '');
-            return (
+      if (line.startsWith('**Day')) {
+        return <h2 key={index} className="day-title">{line.replace(/\*\*/g, '')}</h2>;
+      } else if (line.startsWith('**')) {
+        return <h4 key={index} className="section-heading">{line.replace(/\*\*/g, '')}</h4>;
+      } else if (line.trim().startsWith('*')) {
+        // Remove asterisk properly without leaving a space
+        const formattedLine = line.replace(/^\*\s?/, '').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+        return (
           <li
             key={index}
             className="itinerary-item"
-            dangerouslySetInnerHTML={{ __html: boldedLine }}
+            dangerouslySetInnerHTML={{ __html: formattedLine }}
           />
         );
       } else if (line.trim() === '') {
         return <br key={index} />;
       } else {
+        // Handle bold text formatting correctly
         const boldedText = line.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
         return (
           <p
@@ -114,6 +115,7 @@ const PlanTrip = ({ groupId, initialItinerary, onSaveComplete }) => {
       }
     });
   };
+  
 
 
   const renderViewMode = () => (

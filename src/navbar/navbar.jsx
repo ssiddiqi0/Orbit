@@ -54,6 +54,7 @@ function Navbar() {
           <Link to="/home">O R B I T</Link>
         </div>
         <div className="navbar-links">
+        <Link to="/feedback" className="navbar-link">f e e d b a c k</Link> 
           {isLoggedIn && (
             <>
               <div
@@ -85,6 +86,7 @@ function Navbar() {
               </Link>
             </>
           )}
+          
         </div>
       </div>
     </div>

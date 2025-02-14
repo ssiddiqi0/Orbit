@@ -1,0 +1,62 @@
+/* Center the entire feedback container */
+.feedback-container {
+    max-width: 600px;
+    margin: 40px auto; /* Center it */
+    background: rgba(38, 17, 38, 0.3); /* Subtle background */
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4);
+    text-align: center; /* Center everything */
+    
+  }
+  
+  /* Center feedback text */
+  .feedback-text {
+    text-align: center;
+    font-size: 16px;
+    line-height: 1.8;
+    color: #fff6fd; /* Light pink */
+  }
+  
+  /* Style the feedback textarea */
+  /* Properly center the feedback text area */
+.feedback-textarea {
+    display: block;  /* Ensures full-width alignment */
+    margin: 10px auto; /* Centers horizontally */
+    width: 95%; /* Keeps it within the container */
+     /* Prevents it from being too wide */
+    
+    height: 150px;
+    padding: 12px;
+    border-radius: 10px;
+    font-size: 16px;
+    border: 1px solid rgba(255, 236, 255, 0.3);
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff6fd;
+    resize: none;
+    text-align: left;
+}
+
+  
+  /* Thank You Message */
+  .success-message {
+    font-size: 22px; /* Make it larger */
+    font-weight: bold; /* Make it bold */
+    color: #f794ba; /* Pinkish color */
+    text-align: center;
+    margin-top: 20px;
+    animation: fadeIn 0.8s ease-in-out; /* Smooth animation */
+  }
+  
+  /* Add smooth animation */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  

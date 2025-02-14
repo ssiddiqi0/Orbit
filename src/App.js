@@ -9,6 +9,7 @@ import Profile from './webpages/profile';
 import CreateProfile from './webpages/createProfile';
 import GroupPage from './webpages/Group/GroupPage';
 import Calendar from './webpages/Group/calendar';
+import Feedback from './webpages/feedback'
 import { useNavigate } from "react-router-dom";
 
 function HomePage() {
@@ -77,6 +78,7 @@ function App() {
           <Route path="profile" element={<Profile />} />
           <Route path="group/:groupId" element={<GroupPage />} />
           <Route path="calendar" element={<Calendar />} />
+          <Route path="feedback" element={<Feedback />} />
         </Routes>
       </div>
     </div>
