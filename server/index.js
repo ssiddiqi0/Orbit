@@ -20,10 +20,20 @@ const allowedOrigins = [
 
 
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", allowedOrigins.includes(req.header("Origin")) ? req.header("Origin") : ""); 
+  const origin = req.header("Origin");
+  if (allowedOrigins.includes(origin)) {
+    res.header("Access-Control-Allow-Origin", origin);
+  }
+
   res.header("Access-Control-Allow-Methods", "GET,HEAD,PUT,PATCH,POST,DELETE");
   res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
   res.header("Access-Control-Allow-Credentials", "true");
+
+  // ✅ Allow OPTIONS Preflight Requests
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(204);
+  }
+
   next();
 });
 
