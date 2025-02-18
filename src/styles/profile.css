@@ -25,7 +25,7 @@ body {
   }
   
   .view-groups h1 {
-    color: #1e060f; /* Pink accent */
+    color: #1e060f !important; /* Pink accent */
     font-size: 24px;
     margin-bottom: 20px;
     text-align: center;
@@ -107,7 +107,7 @@ body {
   /* Profile Name */
   .profile-name {
     font-size: 32px;
-    color: #1b1316;
+    color: #1b1316 !important;
     margin: 20px 0 10px;
     font-weight: bold;
     text-transform: capitalize; /* Capitalize for elegance */
@@ -136,6 +136,12 @@ body {
     color: #cccccc;
   }
   
+  .error-message {
+    color: #fe9898 !important; /* Red for error text */
+    margin-bottom: 15px;
+    font-size: 16px;
+}
+
   /* Action Buttons */
   .profile-actions {
   

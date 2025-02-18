@@ -77,7 +77,7 @@
   border-radius: 15px;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
   padding: 30px;
-  margin-top: 30px;
+  margin-top: 20px;
   width: 100%;
   max-width: 600px;
 }
@@ -127,6 +127,11 @@ input:focus {
   border-color: #f794ba; /* Pink accent on focus */
   outline: none;
 }
+.error-message {
+  color: red;
+  font-size: 14px;
+  margin-top: 10px;
+}
 
 .button1 {
   font-family: 'Lora', serif;
@@ -160,10 +165,11 @@ input:focus {
   text-align: center;
   background: #b183a2ac; /* Semi-transparent dark box */
   border-radius: 20px;
+  margin-top: 80px;
   padding: 40px 20px;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
   width: 100%;
-  max-width: 500px;
+  max-width: 600px;
 }
 
 /* Heading styling */

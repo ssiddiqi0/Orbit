@@ -10,6 +10,7 @@ const { DateTime } = require('luxon');
 const multer = require('multer');
 const path = require('path');
 const Feedback = require('./models/Feedback');
+const nodemailer = require('nodemailer');
 app.use(express.json());
 app.use(cors());
 const allowedOrigins = [
@@ -39,6 +40,7 @@ const User = require('./models/Users');
 const Group = require('./models/Group');
 const Event = require('./models/Event'); 
 const Post = require('./models/Post');
+const AppUpdate = require('./models/AppUpdates');
 const Itinerary = require('./models/Itinerary');
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -57,6 +59,33 @@ mongoose.connect(uri)
 
 // Hardcoded JWT Secret
 const JWT_SECRET = 'your_hardcoded_jwt_secret';
+// Set up the transporter for sending emails
+const transporter = nodemailer.createTransport({
+  host: process.env.EMAIL_HOST,
+  port: process.env.EMAIL_PORT,
+  secure: false,
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
+  },
+});
+
+// Function to send an email
+const sendEmail = async (to, subject, content, isHtml = false) => {
+  try {
+    const mailOptions = {
+      from: `"Orbit Notifications" <${process.env.EMAIL_USER}>`,
+      to,
+      subject,
+      [isHtml ? 'html' : 'text']: content, // Sends HTML if true, otherwise plain text
+    };
+    await transporter.sendMail(mailOptions);
+    console.log(`📩 Email sent to ${to}`);
+  } catch (error) {
+    console.error('❌ Error sending email:', error);
+  }
+};
+
 
 // Middleware to verify JWT
 function authenticateToken(req, res, next) {
@@ -74,7 +103,32 @@ function authenticateToken(req, res, next) {
     next();
   });
 }
+app.post('/app-updates', async (req, res) => {
+  const { title, description } = req.body;
+  if (!title || !description) {
+    return res.status(400).json({ error: 'Title and description are required' });
+  }
 
+  try {
+    const update = new AppUpdate({ title, description });
+    await update.save();
+    res.status(201).json(update);
+  } catch (err) {
+    console.error('Error creating app update:', err);
+    res.status(500).json({ error: 'Failed to create app update' });
+  }
+});
+
+// Fetch all app updates (For you and users to view)
+app.get('/app-updates', async (req, res) => {
+  try {
+    const updates = await AppUpdate.find().sort({ createdAt: -1 }); // Show latest first
+    res.status(200).json(updates);
+  } catch (err) {
+    console.error('Error fetching app updates:', err);
+    res.status(500).json({ error: 'Failed to fetch app updates' });
+  }
+});
 app.post('/feedback', async (req, res) => {
   const { feedback } = req.body;
   if (!feedback || feedback.trim() === '') {
@@ -225,13 +279,12 @@ app.post('/groups', authenticateToken, async (req, res) => {
 
   try {
     const creatorId = req.user.id; // Admin's ID from JWT
-
     console.log("Creator ID:", creatorId);
 
     // Convert provided members to user IDs
-    const users = await User.find({ email: { $in: members } }).select('_id');
+    const users = await User.find({ email: { $in: members } }).select('_id email name');
     const memberIds = users.map((user) => user._id);
-
+    
     // Ensure the admin's ID is in the `members` array
     if (!memberIds.includes(creatorId)) {
       memberIds.push(creatorId); // Add admin directly by ID
@@ -247,8 +300,39 @@ app.post('/groups', authenticateToken, async (req, res) => {
     });
 
     const savedGroup = await newGroup.save();
-
     console.log("Saved Group:", savedGroup);
+
+    // 📩 Send Email Notification to All Added Members
+    const emails = users.map(user => user.email);
+    const subject = `You've Been Added to ${name}!`;
+
+    // 🌟 Correct Group Link
+    const groupLink = `https://ssiddiqi0.github.io/Orbit/#/group/${savedGroup._id}`;
+
+    // 📩 Simple Email Notification
+    const html = `
+      <div style="background: #965796 !important; color: #FFF6FD !important; font-family: 'Lora', serif; text-align: center; padding: 25px; border-radius: 15px; max-width: 500px; margin: auto; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);">
+        
+        <h2 style="color: #FFF6FD !important; font-size: 24px; margin-bottom: 5px;">🪐 You've Been Added to a Group on Orbit!</h2>
+
+        <p style="font-size: 18px; color: #FFF6FD !important; margin-bottom: 15px;">
+          <strong>Group:</strong> ${name}
+        </p>
+
+        <p style="color: #FFF6FD !important; font-size: 16px; line-height: 1.5; margin-bottom: 20px;">
+          You have been added to the group <strong>${name}</strong>. Click below to check it out!
+        </p>
+
+        <hr style="border: 0; height: 1px; background: #D8BFD8; margin: 20px auto; width: 80%;">
+
+        <a href="${groupLink}" style="display: inline-block; background: #FFF6FD; color: #965796 !important; padding: 12px 20px; text-decoration: none; font-weight: bold; border-radius: 8px; font-size: 16px; box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.2);">
+          View Group
+        </a>
+
+      </div>
+    `;
+
+    emails.forEach(email => sendEmail(email, subject, html, true));
 
     res.status(201).json(savedGroup);
   } catch (error) {
@@ -302,17 +386,50 @@ app.post('/groups/:groupId/members', authenticateToken, async (req, res) => {
       return res.status(404).json({ error: 'User not found' });
     }
 
-    const group = await Group.findById(groupId);
+    const group = await Group.findById(groupId).populate('members', 'email name');
     if (!group) {
       return res.status(404).json({ error: 'Group not found' });
     }
 
-    if (group.members.includes(user._id)) {
+    if (group.members.some(member => member._id.toString() === user._id.toString())) {
       return res.status(400).json({ error: 'User is already a member' });
     }
 
+    // Add the user to the group
     group.members.push(user._id);
     await group.save();
+
+    // 📩 Send Email Notification to All Group Members
+    const emails = group.members.map(member => member.email);
+    const subject = `New Member in ${group.name}: ${user.name}`;
+
+    // 🌟 Correct Group Link
+    const groupLink = `https://ssiddiqi0.github.io/Orbit/#/group/${groupId}`;
+
+    // 📩 Simple Email Notification
+    const html = `
+      <div style="background: #965796 !important; color: #FFF6FD !important; font-family: 'Lora', serif; text-align: center; padding: 25px; border-radius: 15px; max-width: 500px; margin: auto; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);">
+        
+        <h2 style="color: #FFF6FD !important; font-size: 24px; margin-bottom: 5px;">🎉 New Member Joined!</h2>
+
+        <p style="font-size: 18px; color: #FFF6FD !important; margin-bottom: 15px;">
+          <strong>Group:</strong> ${group.name}
+        </p>
+
+        <p style="color: #FFF6FD !important; font-size: 16px; line-height: 1.5; margin-bottom: 20px;">
+          <strong>${user.name}</strong> has just joined your group! Welcome them to the team. 🎊
+        </p>
+
+        <hr style="border: 0; height: 1px; background: #D8BFD8; margin: 20px auto; width: 80%;">
+
+        <a href="${groupLink}" style="display: inline-block; background: #FFF6FD; color: #965796 !important; padding: 12px 20px; text-decoration: none; font-weight: bold; border-radius: 8px; font-size: 16px; box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.2);">
+          View Group
+        </a>
+
+      </div>
+    `;
+
+    emails.forEach(email => sendEmail(email, subject, html, true));
 
     res.status(200).json({ message: 'Member added successfully', newMember: user });
   } catch (error) {
@@ -320,6 +437,7 @@ app.post('/groups/:groupId/members', authenticateToken, async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 });
+
 app.delete('/groups/:groupId/members/:memberId', authenticateToken, async (req, res) => {
   const { groupId, memberId } = req.params;
   const userId = req.user.id; // Current user ID from token
@@ -502,7 +620,6 @@ app.post('/mock-events', async (req, res) => {
     res.status(500).json({ error: 'Internal server error', details: err.message });
   }
 });
-
 app.post('/groups/:groupId/posts', authenticateToken, async (req, res) => {
   const { groupId } = req.params;
   const { type, heading, description, pollOptions } = req.body;
@@ -522,6 +639,44 @@ app.post('/groups/:groupId/posts', authenticateToken, async (req, res) => {
     });
 
     await newPost.save();
+
+    // 📩 Send Email to All Group Members
+    const group = await Group.findById(groupId).populate('members', 'email name');
+    const emails = group.members.map(member => member.email);
+
+    const subject = `${type.charAt(0).toUpperCase() + type.slice(1)} Post in ${group.name}: ${heading}`;
+
+    // 🌟 Correct Group Link
+    const groupLink = `https://ssiddiqi0.github.io/Orbit/#/group/${groupId}`;
+
+    // 🎨 Exact Orbit-Themed Email with Your Colors
+    const html = `
+  <div style="background: #965796 !important; color: #FFF6FD !important; font-family: 'Lora', serif; text-align: center; padding: 25px; border-radius: 15px; max-width: 500px; margin: auto; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);">
+    
+    <h2 style="color: #FFF6FD !important; font-size: 24px; margin-bottom: 5px;">💌 New Post in Your Group</h2>
+
+    <p style="font-size: 18px; color: #FFF6FD !important; margin-bottom: 15px;">
+      <strong>Group:</strong> ${group.name}
+    </p>
+
+    <h3 style="color: #FFF6FD !important; font-size: 22px; margin-bottom: 15px;">
+      ${heading}
+    </h3>
+
+    <p style="color: #FFF6FD !important; font-size: 16px; line-height: 1.5; margin-bottom: 20px;">
+      ${description || 'No description provided.'}
+    </p>
+
+    <hr style="border: 0; height: 1px; background: #D8BFD8; margin: 20px auto; width: 80%;">
+
+    <a href="${groupLink}" style="display: inline-block; background: #FFF6FD; color: #965796 !important; padding: 12px 20px; text-decoration: none; font-weight: bold; border-radius: 8px; font-size: 16px; box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.2);">
+      View Post
+    </a>
+
+  </div>
+`;
+    emails.forEach(email => sendEmail(email, subject, html, true));
+
     res.status(201).json(newPost);
   } catch (err) {
     console.error('Error creating post:', err);

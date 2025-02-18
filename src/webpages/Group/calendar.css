@@ -194,7 +194,12 @@
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Slight shadow for depth */
   }
-  
+  .error-message {
+    color: #fe9898; /* Red for error text */
+    margin-bottom: 15px;
+    font-size: 16px;
+}
+
   .post-item h4 {
     font-size: 18px;
     margin-bottom: 5px;

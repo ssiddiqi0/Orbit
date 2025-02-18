@@ -55,6 +55,11 @@ function Navbar() {
         </div>
         <div className="navbar-links">
         <Link to="/feedback" className="navbar-link">f e e d b a c k</Link> 
+        {!isLoggedIn && (
+          
+          <Link to ="/login" className="navbar-link">l o g i n</Link>
+        
+        )}
           {isLoggedIn && (
             <>
               <div

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './feedback.css';
+import '../../styles/feedback.css';
 
 const Feedback = () => {
   const [feedback, setFeedback] = useState('');

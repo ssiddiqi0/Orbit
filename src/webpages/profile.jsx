@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../navbar/navbar';
-import styles from './profile.css';
+import '../styles/profile.css';
 
 const Profile = () => {
   const [user, setUser] = useState(null);
@@ -271,9 +271,9 @@ return (
               <h1 className="profile-name">My name is {user.name}</h1>
               <div className="profile-details">
                 <p className="profile-email">Email: {user.email}</p>
-                <p className="profile-bio">
+                {/* <p className="profile-bio">
                   {user.bio || "This is a short bio about the user."}
-                </p>
+                </p> */}
               </div>
               <div className="profile-actions">
                 <button

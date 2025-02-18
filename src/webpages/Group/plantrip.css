@@ -52,9 +52,9 @@
 }
 
 .error-message {
-    color: #ff6b6b; /* Red for error text */
+    color: #fe9898; /* Red for error text */
     margin-bottom: 15px;
-    font-size: 14px;
+    font-size: 16px;
 }
 
 .itinerary-output h3 {

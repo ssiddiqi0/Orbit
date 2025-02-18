@@ -1,0 +1,56 @@
+.homepage-container {
+    max-width: 800px;
+    margin: auto;
+    padding: 20px;
+    text-align: center;
+    color: white;
+  }
+
+  
+  /* 🚀 App Updates Section */
+  .updates-section {
+    background: rgba(50, 50, 50, 0.3);
+    padding: 20px;
+    border-radius: 10px;
+    margin: 20px 0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  }
+  
+  h1, h2, h3, p, span {
+    color: white !important;
+  }
+  
+  /* 📌 Card Container */
+  .update-card {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    margin-bottom: 15px;
+    text-align: left;
+  }
+  
+  /* 📝 Post Title */
+  .post-title {
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+    margin-bottom: 10px;
+  }
+  
+  /* 📝 Post Content (Fixes Line Break Issues) */
+  .post-paragraph {
+    font-size: 16px;
+    line-height: 1.5;
+    color: white;
+    white-space: pre-line; /* Automatically converts `\n` to line breaks */
+  }
+  
+  /* 📅 Date */
+  .post-date {
+    font-size: 12px;
+    opacity: 0.8;
+    margin-top: 10px;
+    font-style: italic;
+  }
+  
