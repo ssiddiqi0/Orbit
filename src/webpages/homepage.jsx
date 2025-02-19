@@ -8,7 +8,7 @@ const HomePage = () => {
   useEffect(() => {
     const fetchAppUpdates = async () => {
       try {
-        const response = fetch(`${process.env.REACT_APP_API_URL}/app-updates`);
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/app-updates`);
         if (response.ok) {
           setAppUpdates(await response.json());
         }

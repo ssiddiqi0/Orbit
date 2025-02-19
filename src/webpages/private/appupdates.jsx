@@ -39,7 +39,7 @@ const PostUpdate = () => {
   
   const handlePostUpdate = async () => {
     try {
-      const response = await fetch('http://localhost:5002/app-updates', {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/app-updates`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ title, description }),
