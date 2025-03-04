@@ -25,7 +25,11 @@ const HomePage = () => {
       <h1>Stay in sync with Orbit</h1>
       <em>— where every group revolves around seamless connection and effortless coordination —</em>
       <img src={pinkplanet} alt="Example" className="planet-image" />
-
+      {appUpdates.length === 0 && (
+        <p style={{ color: 'orange', fontWeight: 'bold', textAlign: 'center' }}>
+          ⏳ It may take up to 50 seconds initially for Orbit to start up...
+        </p>
+      )}
       {/* 🚀 App Updates Section */}
       <div className="updates-section">
         <h2>Latest Updates</h2>
