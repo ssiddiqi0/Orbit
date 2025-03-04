@@ -26,9 +26,9 @@ const HomePage = () => {
       <em>— where every group revolves around seamless connection and effortless coordination —</em>
       <img src={pinkplanet} alt="Example" className="planet-image" />
       {appUpdates.length === 0 && (
-        <p style={{ color: 'orange', fontWeight: 'bold', textAlign: 'center' }}>
+        <h3 style={{ color: 'orange', fontWeight: 'bold', textAlign: 'center' }}>
           ⏳ It may take up to 50 seconds initially for Orbit to start up...
-        </p>
+        </h3>
       )}
       {/* 🚀 App Updates Section */}
       <div className="updates-section">
