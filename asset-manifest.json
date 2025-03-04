@@ -1,16 +1,16 @@
 {
   "files": {
     "main.css": "/Orbit/static/css/main.a7f3e5dd.css",
-    "main.js": "/Orbit/static/js/main.e02dae71.js",
+    "main.js": "/Orbit/static/js/main.a747c575.js",
     "static/js/453.26f2b15c.chunk.js": "/Orbit/static/js/453.26f2b15c.chunk.js",
     "static/media/pink-planet.png": "/Orbit/static/media/pink-planet.24b56f44136d7912b19d.png",
     "index.html": "/Orbit/index.html",
     "main.a7f3e5dd.css.map": "/Orbit/static/css/main.a7f3e5dd.css.map",
-    "main.e02dae71.js.map": "/Orbit/static/js/main.e02dae71.js.map",
+    "main.a747c575.js.map": "/Orbit/static/js/main.a747c575.js.map",
     "453.26f2b15c.chunk.js.map": "/Orbit/static/js/453.26f2b15c.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.a7f3e5dd.css",
-    "static/js/main.e02dae71.js"
+    "static/js/main.a747c575.js"
   ]
 }
