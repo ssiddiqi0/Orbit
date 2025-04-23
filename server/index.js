@@ -888,7 +888,8 @@ app.delete('/groups/:groupId/itineraries/:itineraryId', async (req, res) => {
 });
 
 
-const PORT = 5002; // Hardcoded port
+const PORT = process.env.PORT || 5002;
+
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
